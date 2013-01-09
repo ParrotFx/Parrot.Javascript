@@ -18,7 +18,7 @@
       head > title > "This is Parrot!"
       body {
         h1#header > @header
-        p#tagname.small > "All new Asp.Net View Engine"
+        p#tagname.small > "All new Javascript based rendering engine"
         div#description.rounded-corners {
           h2 > "Features"
           ul(features) > li > @this
@@ -36,7 +36,7 @@
       </head>
       <body>
         <h1 id="header">Parrot</h1>
-        <p class="small" id="tagname">All new Asp.Net View Engine</p>
+        <p class="small" id="tagname">All new Javascript based rendering engine</p>
         <div class="rounded-corners" id="description">
             <h2>Features</h2>
             <ul>

@@ -1,9 +1,9 @@
 ##Sample View Model
 
     {
-      Header: "Parrot",
-      Description: "Something something about Parrot",
-      Features:[
+      header: "Parrot",
+      description: "Something something about Parrot",
+      features:[
         "Familiar syntax",
         "Extensible output",
         "Simple model binding"
@@ -17,11 +17,11 @@
     html {
       head > title > "This is Parrot!"
       body {
-        h1#header > @Header
+        h1#header > @header
         p#tagname.small > "All new Asp.Net View Engine"
         div#description.rounded-corners {
           h2 > "Features"
-          ul(Features) > li > @this
+          ul(features) > li > @this
         }
       }
     }

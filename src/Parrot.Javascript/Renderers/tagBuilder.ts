@@ -1,3 +1,4 @@
+///<reference path="../exceptions.ts" />
 enum TagRenderMode {
     startTag,
     endTag,

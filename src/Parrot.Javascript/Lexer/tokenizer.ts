@@ -67,13 +67,21 @@ class Tokenizer {
     consumeQuotedStringLiteral(quote : string): string {
         var result = this.consume();;
         var character = this.peek();
-        while (character != quote) {
+        while (true) {
+            while (character != quote) {
+                this.consume();
+                result += character;
+                character = this.peek();
+            }
+            result += this.consume();
+            if (this.peek() != quote) {
+                break;
+            }
             this.consume();
-            result += character;
             character = this.peek();
         }
 
-        result += this.consume();
+        //result += this.consume();
         return result;
     }
 

@@ -1,3 +1,4 @@
+///<reference path="../exceptions.ts" />
 var TagRenderMode;
 (function (TagRenderMode) {
     TagRenderMode._map = [];

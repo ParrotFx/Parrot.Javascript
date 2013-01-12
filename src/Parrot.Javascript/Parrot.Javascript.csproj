@@ -1,0 +1,366 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{73B5DD7A-6020-46FB-9661-18960CC5C3B1}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Parrot.Javascript</RootNamespace>
+    <AssemblyName>Parrot.Javascript</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="exceptions.js">
+      <DependentUpon>exceptions.ts</DependentUpon>
+    </Content>
+    <Content Include="exceptions.min.js">
+      <DependentUpon>exceptions.ts</DependentUpon>
+    </Content>
+    <Content Include="exceptions.ts" />
+    <Content Include="Infrastructure\Locals.js">
+      <DependentUpon>Locals.ts</DependentUpon>
+    </Content>
+    <Content Include="Infrastructure\Locals.min.js">
+      <DependentUpon>Locals.ts</DependentUpon>
+    </Content>
+    <Content Include="Infrastructure\Locals.ts" />
+    <Content Include="Infrastructure\ObjectModelValueProvider.js">
+      <DependentUpon>ObjectModelValueProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="Infrastructure\ObjectModelValueProvider.min.js">
+      <DependentUpon>ObjectModelValueProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="Infrastructure\ObjectModelValueProvider.ts" />
+    <Content Include="Infrastructure\ValueTypeProvider.js">
+      <DependentUpon>ValueTypeProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="Infrastructure\ValueTypeProvider.min.js">
+      <DependentUpon>ValueTypeProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="Infrastructure\ValueTypeProvider.ts" />
+    <Content Include="Lexer\token.js">
+      <DependentUpon>token.ts</DependentUpon>
+    </Content>
+    <Content Include="Lexer\token.min.js">
+      <DependentUpon>token.ts</DependentUpon>
+    </Content>
+    <Content Include="Lexer\token.ts" />
+    <Content Include="Lexer\tokenizer.js">
+      <DependentUpon>tokenizer.ts</DependentUpon>
+    </Content>
+    <Content Include="Lexer\tokenizer.min.js">
+      <DependentUpon>tokenizer.ts</DependentUpon>
+    </Content>
+    <Content Include="Lexer\tokenizer.ts" />
+    <Content Include="Lexer\tokens.js">
+      <DependentUpon>tokens.ts</DependentUpon>
+    </Content>
+    <Content Include="Lexer\tokens.min.js">
+      <DependentUpon>tokens.ts</DependentUpon>
+    </Content>
+    <Content Include="Lexer\tokens.ts" />
+    <Content Include="Lexer\tokenType.js">
+      <DependentUpon>tokenType.ts</DependentUpon>
+    </Content>
+    <Content Include="Lexer\tokenType.min.js">
+      <DependentUpon>tokenType.ts</DependentUpon>
+    </Content>
+    <Content Include="Lexer\tokenType.ts" />
+    <Content Include="Parser\parser.js">
+      <DependentUpon>parser.ts</DependentUpon>
+    </Content>
+    <Content Include="Parser\parser.min.js">
+      <DependentUpon>parser.ts</DependentUpon>
+    </Content>
+    <Content Include="Parser\parser.ts" />
+    <Content Include="Parser\parserError.js">
+      <DependentUpon>parserError.ts</DependentUpon>
+    </Content>
+    <Content Include="Parser\parserError.min.js">
+      <DependentUpon>parserError.ts</DependentUpon>
+    </Content>
+    <Content Include="Parser\parserError.ts" />
+    <Content Include="Parser\stream.js">
+      <DependentUpon>stream.ts</DependentUpon>
+    </Content>
+    <Content Include="Parser\stream.min.js">
+      <DependentUpon>stream.ts</DependentUpon>
+    </Content>
+    <Content Include="Parser\stream.ts" />
+    <Content Include="Renderers\baseRenderer.js">
+      <DependentUpon>baseRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\baseRenderer.min.js">
+      <DependentUpon>baseRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\baseRenderer.ts" />
+    <Content Include="Renderers\conditionalRenderer.js">
+      <DependentUpon>conditionalRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\conditionalRenderer.min.js">
+      <DependentUpon>conditionalRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\conditionalRenderer.ts" />
+    <Content Include="Renderers\docTypeRenderer.js">
+      <DependentUpon>docTypeRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\docTypeRenderer.min.js">
+      <DependentUpon>docTypeRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\docTypeRenderer.ts" />
+    <Content Include="Renderers\foreachRenderer.js">
+      <DependentUpon>foreachRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\foreachRenderer.min.js">
+      <DependentUpon>foreachRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\foreachRenderer.ts" />
+    <Content Include="Renderers\htmlRenderer.js">
+      <DependentUpon>htmlRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\htmlRenderer.min.js">
+      <DependentUpon>htmlRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\htmlRenderer.ts" />
+    <Content Include="Renderers\ifRenderer.js">
+      <DependentUpon>ifRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\ifRenderer.min.js">
+      <DependentUpon>ifRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\ifRenderer.ts" />
+    <Content Include="Renderers\inputRenderer.js">
+      <DependentUpon>inputRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\inputRenderer.min.js">
+      <DependentUpon>inputRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\inputRenderer.ts" />
+    <Content Include="Renderers\iRenderer.ts" />
+    <Content Include="Renderers\listRenderer.js">
+      <DependentUpon>listRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\listRenderer.min.js">
+      <DependentUpon>listRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\listRenderer.ts" />
+    <Content Include="Renderers\parrotDocumentView.js">
+      <DependentUpon>parrotDocumentView.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\parrotDocumentView.min.js">
+      <DependentUpon>parrotDocumentView.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\parrotDocumentView.ts" />
+    <Content Include="Renderers\rendererProvider.js">
+      <DependentUpon>rendererProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\rendererProvider.min.js">
+      <DependentUpon>rendererProvider.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\rendererProvider.ts" />
+    <Content Include="Renderers\selfClosingRenderer.js">
+      <DependentUpon>selfClosingRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\selfClosingRenderer.min.js">
+      <DependentUpon>selfClosingRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\selfClosingRenderer.ts" />
+    <Content Include="Renderers\stringRenderer.js">
+      <DependentUpon>stringRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\stringRenderer.min.js">
+      <DependentUpon>stringRenderer.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\stringRenderer.ts" />
+    <Content Include="Renderers\tagBuilder.js">
+      <DependentUpon>tagBuilder.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\tagBuilder.min.js">
+      <DependentUpon>tagBuilder.ts</DependentUpon>
+    </Content>
+    <Content Include="Renderers\tagBuilder.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="exceptions.js.map">
+      <DependentUpon>exceptions.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Infrastructure\Locals.js.map">
+      <DependentUpon>Locals.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Infrastructure\ObjectModelValueProvider.js.map">
+      <DependentUpon>ObjectModelValueProvider.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Infrastructure\ValueTypeProvider.js.map">
+      <DependentUpon>ValueTypeProvider.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Lexer\tokenType.js.map">
+      <DependentUpon>tokenType.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Lexer\tokens.js.map">
+      <DependentUpon>tokens.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Lexer\tokenizer.js.map">
+      <DependentUpon>tokenizer.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Lexer\token.js.map">
+      <DependentUpon>token.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Parser\stream.js.map">
+      <DependentUpon>stream.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Parser\parserError.js.map">
+      <DependentUpon>parserError.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Parser\parser.js.map">
+      <DependentUpon>parser.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Renderers\stringRenderer.js.map">
+      <DependentUpon>stringRenderer.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Renderers\selfClosingRenderer.js.map">
+      <DependentUpon>selfClosingRenderer.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Renderers\rendererProvider.js.map">
+      <DependentUpon>rendererProvider.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Renderers\parrotDocumentView.js.map">
+      <DependentUpon>parrotDocumentView.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Renderers\listRenderer.js.map">
+      <DependentUpon>listRenderer.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Renderers\inputRenderer.js.map">
+      <DependentUpon>inputRenderer.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Renderers\ifRenderer.js.map">
+      <DependentUpon>ifRenderer.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Renderers\htmlRenderer.js.map">
+      <DependentUpon>htmlRenderer.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Renderers\foreachRenderer.js.map">
+      <DependentUpon>foreachRenderer.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Renderers\docTypeRenderer.js.map">
+      <DependentUpon>docTypeRenderer.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Renderers\conditionalRenderer.js.map">
+      <DependentUpon>conditionalRenderer.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Renderers\baseRenderer.js.map">
+      <DependentUpon>baseRenderer.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Renderers\tagBuilder.js.map">
+      <DependentUpon>tagBuilder.ts</DependentUpon>
+    </Content>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:54019/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -20,22 +20,25 @@ class Parser {
     }
 
     parse(stream: string) {
-        var document = new ParrotDocument();
-        var tokenizer = new Tokenizer(stream);
-        var tokens = tokenizer.tokens();
-        var tokenStream = new Stream(tokens);
-        
-        var parent = this;
-        
-        this.parseStream(tokenStream, function (s) {
-            for (var i in s) {
-                parent.parseStatementErrors(s[i]);
-                document.children.push(s[i]);
-            }
-        });
+        try {
+            var document = new ParrotDocument();
+            var tokenizer = new Tokenizer(stream);
+            var tokens = tokenizer.tokens();
+            var tokenStream = new Stream(tokens);
 
+            var parent = this;
+
+            this.parseStream(tokenStream, function (s) {
+                for (var i in s) {
+                    parent.parseStatementErrors(s[i]);
+                    document.children.push(s[i]);
+                }
+            });
+        } catch (e) {
+            this.errors.push(e);
+        }
         document.errors = this.errors;
-                
+
         return document;
     }
 
@@ -133,6 +136,11 @@ class Parser {
                     stream.nextNoReturn();
                     tail = this.parseSingleStatementTail(stream);
                     break;
+                case TokenType.stringLiteralPipe:
+                    if (!(previousToken instanceof StringLiteralPipeToken)) {
+                        tail = this.parseSingleStatementTail(stream);
+                        break;
+                    }
                 default:
                     this.getStatementFromToken(identifier, tail, null);
                     exit = true;
@@ -334,6 +342,9 @@ class Parser {
     }
 
     parseAttributes(stream: Stream): Attribute[] {
+
+        stream.next();
+
         var attributes: Attribute[] = [];
 
         var token: Token = null;
@@ -357,9 +368,11 @@ class Parser {
                     //invalid token
                     this.errors.push(new AttributeIdentifierMissing(token.index));
                     //throw new ParserException(token);
-                    return attributes;
+                    exit = true;
             }
         }
+
+        return attributes;
     }
 
     parseAttribute(stream: Stream): Attribute {
@@ -457,6 +470,7 @@ class Statement {
         this.children = [];
         this.identifierParts = [];
         this.errors = [];
+        this.name = null;
 
         var container = this;
 
@@ -486,7 +500,7 @@ class Statement {
                         container.addAttribute(new Attribute("type", literal));
                         break;
                     case IdentifierType.literal:
-                        container.name = part.name;
+                        container.name = part.name ? part.name : null;
                         break;
                 }
 
@@ -795,7 +809,7 @@ class StringLiteral extends Statement {
 
 class StringLiteralPipe extends StringLiteral {
     constructor(value: string, tail: StatementTail, index: number) {
-        super(value, tail, index);
+        super("\"" + value + "\"", tail, index);
     }
 }
 

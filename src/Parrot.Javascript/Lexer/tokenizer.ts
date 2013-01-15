@@ -182,6 +182,10 @@ class Tokenizer {
 }
 
 class EndOfStreamException {
+    message: string;
+    constructor() {
+        this.message = "Unexpected end of stream";
+    }
 }
 
 class UnexpectedTokenException {

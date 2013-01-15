@@ -19,17 +19,21 @@ var Parser = (function () {
         this.errors = [];
     }
     Parser.prototype.parse = function (stream) {
-        var document = new ParrotDocument();
-        var tokenizer = new Tokenizer(stream);
-        var tokens = tokenizer.tokens();
-        var tokenStream = new Stream(tokens);
-        var parent = this;
-        this.parseStream(tokenStream, function (s) {
-            for(var i in s) {
-                parent.parseStatementErrors(s[i]);
-                document.children.push(s[i]);
-            }
-        });
+        try  {
+            var document = new ParrotDocument();
+            var tokenizer = new Tokenizer(stream);
+            var tokens = tokenizer.tokens();
+            var tokenStream = new Stream(tokens);
+            var parent = this;
+            this.parseStream(tokenStream, function (s) {
+                for(var i in s) {
+                    parent.parseStatementErrors(s[i]);
+                    document.children.push(s[i]);
+                }
+            });
+        } catch (e) {
+            this.errors.push(e);
+        }
         document.errors = this.errors;
         return document;
     };
@@ -137,6 +141,13 @@ var Parser = (function () {
                     stream.nextNoReturn();
                     tail = this.parseSingleStatementTail(stream);
                     break;
+
+                }
+                case TokenType.stringLiteralPipe: {
+                    if(!(previousToken instanceof StringLiteralPipeToken)) {
+                        tail = this.parseSingleStatementTail(stream);
+                        break;
+                    }
 
                 }
                 default: {
@@ -350,6 +361,7 @@ var Parser = (function () {
         return new Parameter(identifier.content);
     };
     Parser.prototype.parseAttributes = function (stream) {
+        stream.next();
         var attributes = [];
         var token = null;
         var exit = false;
@@ -375,11 +387,12 @@ var Parser = (function () {
                     //invalid token
                     this.errors.push(new AttributeIdentifierMissing(token.index));
                     //throw new ParserException(token);
-                    return attributes;
+                    exit = true;
 
                 }
             }
         }
+        return attributes;
     };
     Parser.prototype.parseAttribute = function (stream) {
         var identifier = stream.next();
@@ -464,6 +477,7 @@ var Statement = (function () {
         this.children = [];
         this.identifierParts = [];
         this.errors = [];
+        this.name = null;
         var container = this;
         if(this.indexOfAny(name, [
             ".", 
@@ -505,7 +519,7 @@ var Statement = (function () {
 
                     }
                     case IdentifierType.literal: {
-                        container.name = part.name;
+                        container.name = part.name ? part.name : null;
                         break;
 
                     }
@@ -786,7 +800,7 @@ var StringLiteral = (function (_super) {
 var StringLiteralPipe = (function (_super) {
     __extends(StringLiteralPipe, _super);
     function StringLiteralPipe(value, tail, index) {
-        _super.call(this, value, tail, index);
+        _super.call(this, "\"" + value + "\"", tail, index);
     }
     return StringLiteralPipe;
 })(StringLiteral);

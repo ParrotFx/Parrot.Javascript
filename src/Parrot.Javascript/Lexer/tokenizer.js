@@ -201,7 +201,9 @@ var Tokenizer = (function () {
     return Tokenizer;
 })();
 var EndOfStreamException = (function () {
-    function EndOfStreamException() { }
+    function EndOfStreamException() {
+        this.message = "Unexpected end of stream";
+    }
     return EndOfStreamException;
 })();
 var UnexpectedTokenException = (function () {

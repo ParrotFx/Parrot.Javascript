@@ -24,4 +24,21 @@ class BaseRenderer {
 
         return model;
     }
+
+    beforeRender(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider) {
+        if (statement.parameters) {
+            for(var i in statement.parameters) {
+                var parameter = statement.parameters[i];
+                if (parameter.value && ((parameter.startsWith("\"") && parameter.endsWith("\"")) || (parameter.startsWith("'") && parameter.endsWith("'")))) {
+                    var stringLiteral = new stringLiteral(parameter.value);
+                    var renderer = rendererProvider.getRenderer("string");
+                    parameter.calculatedValue = renderer.render(stringLiteral, host, model, rendererProvider);
+                }
+            }
+        }
+    }
+
+    afterRender(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider) {
+    
+    }
 }

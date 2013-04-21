@@ -21,6 +21,20 @@ var BaseRenderer = (function () {
         }
         return model;
     };
+    BaseRenderer.prototype.beforeRender = function (statement, host, model, rendererProvider) {
+        if(statement.parameters) {
+            for(var i in statement.parameters) {
+                var parameter = statement.parameters[i];
+                if(parameter.value && ((parameter.startsWith("\"") && parameter.endsWith("\"")) || (parameter.startsWith("'") && parameter.endsWith("'")))) {
+                    var stringLiteral = new stringLiteral(parameter.value);
+                    var renderer = rendererProvider.getRenderer("string");
+                    parameter.calculatedValue = renderer.render(stringLiteral, host, model, rendererProvider);
+                }
+            }
+        }
+    };
+    BaseRenderer.prototype.afterRender = function (statement, host, model, rendererProvider) {
+    };
     return BaseRenderer;
 })();
 //@ sourceMappingURL=baseRenderer.js.map

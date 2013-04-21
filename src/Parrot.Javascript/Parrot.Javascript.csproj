@@ -210,7 +210,7 @@
       <DependentUpon>tagBuilder.ts</DependentUpon>
     </Content>
     <Content Include="Renderers\tagBuilder.ts" />
-    <Content Include="Tests\stringparser.html" />
+    <Content Include="Tests\parser.html" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="exceptions.js.map">

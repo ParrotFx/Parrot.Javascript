@@ -17,17 +17,19 @@ class ListRenderer extends HtmlRenderer {
             defaultTag = this.defaultChildTag;
         }
 
-        if (Object.prototype.toString.call(model) === '[object Array]') {
-            var result: string = "";
-            for (var i in model) {
-                var locals = new Locals(host);
-                locals.push(this.iteratorItem(i, model));
-                result += this._renderChildren(statement.children, host, model[i], defaultTag);
-                locals.pop();
+        if (statement.parameters.length == 1) {
+            //get the parameter value
+            if (Object.prototype.toString.call(model) === '[object Array]') {
+                var result: string = "";
+                for (var i in model) {
+                    var locals = new Locals(host);
+                    locals.push(this.iteratorItem(i, model));
+                    result += this._renderChildren(statement.children, host, model[i], defaultTag);
+                    locals.pop();
+                }
+                return result;
             }
-            return result;
         }
-
         return this._renderChildren(statement.children, host, model, defaultTag);
     }
 

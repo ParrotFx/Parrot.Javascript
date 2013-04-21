@@ -27,7 +27,7 @@
 </head>
 <body>
     <div id="qunit"></div>
-    <script src="http://code.jquery.com/qunit/qunit-1.10.0.js"></script>
+    <script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
     <script>
         (function () {
             String.prototype.format = function () {
@@ -365,7 +365,6 @@
 
                 test("element with empty class declaration returns error", function() {
                     var document = parse("div.");
-                    console.log(document.errors[0].message);
                     areEqual("Missing Class declaration", document.errors[0].message);
                 });
             })();
@@ -404,7 +403,6 @@
 
                 test("element without element declaration but with class declaration creates div element", function() {
                     var document = parse(".sample-class");
-                    console.log(document.children[0].name);
                     areEqual(null, document.children[0].name);
                     areEqual("class", document.children[0].attributes[0].key);
                     areEqual("sample-class", document.children[0].attributes[0].value.values[0].data);
@@ -422,7 +420,6 @@
 
                 test("attribute value with missing closing quote adds error to document errors", function() {
                     var document = parse("div[attr1='missing closing quote");
-                    console.log(document.errors[0].message);
                     areEqual("Unexpected end of stream", document.errors[0].message);
                 });
             })();

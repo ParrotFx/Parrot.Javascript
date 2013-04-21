@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>String literal tests</title>
+    <title>parser tests</title>
     <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.10.0.css">
     <script type="text/javascript" src="../Lexer/token.js"></script>
     <script type="text/javascript" src="../Lexer/tokenizer.js"></script>
@@ -385,6 +385,16 @@
                 test("element with attributes value not surrounded by quotes produces attribute with value type as property", function() {
                     var document = parse("div[attr1=Value]");
                     areEqual(1, document.children[0].attributes.length);
+                });
+
+                test("element with attribute value set to 'this' produces attrivute value with type as local", function() {
+                    var document = parse("div[attr1=this]");
+                    areEqual(1, document.children[0].attributes.length);
+                });
+
+                test("element with attribute value and child prints out proper attributes", function() {
+                    var document = parse("a[href='/blah'] |Child\r\n");
+                    areEqual("href", document.children[0].attributes[0].key);
                 });
 
                 test("element with attribute withno value produces attribute with value set to null", function() {

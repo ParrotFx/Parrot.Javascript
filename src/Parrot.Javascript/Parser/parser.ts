@@ -134,11 +134,11 @@ class Parser {
                     break;
                 case TokenType.greaterThan:
                     stream.nextNoReturn();
-                    tail = this.parseSingleStatementTail(stream);
+                    tail = this.parseSingleStatementTail(stream, tail);
                     break;
                 case TokenType.stringLiteralPipe:
                     if (!(previousToken instanceof StringLiteralPipeToken)) {
-                        tail = this.parseSingleStatementTail(stream);
+                        tail = this.parseSingleStatementTail(stream, tail);
                         break;
                     }
                 default:
@@ -194,9 +194,11 @@ class Parser {
         return new Statement(value, tail, identifier.index);
     }
 
-    parseSingleStatementTail(stream: Stream) {
+    parseSingleStatementTail(stream: Stream, tail: StatementTail) {
         var statementList = this.parseStatement(stream);
-        var tail = new StatementTail();
+        if (!tail) {
+            tail = new StatementTail();
+        }
         tail.children = statementList;
 
         return tail;
@@ -636,9 +638,11 @@ class MultipleIdDeclarations extends ParserError {
 
 class Parameter {
     value: string;
+    calculatedValue: string;
 
     constructor(value: string) {
         this.value = value;
+        this.calculatedValue = value;
     }
 }
 

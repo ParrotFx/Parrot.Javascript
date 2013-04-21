@@ -139,13 +139,13 @@ var Parser = (function () {
                 }
                 case TokenType.greaterThan: {
                     stream.nextNoReturn();
-                    tail = this.parseSingleStatementTail(stream);
+                    tail = this.parseSingleStatementTail(stream, tail);
                     break;
 
                 }
                 case TokenType.stringLiteralPipe: {
                     if(!(previousToken instanceof StringLiteralPipeToken)) {
-                        tail = this.parseSingleStatementTail(stream);
+                        tail = this.parseSingleStatementTail(stream, tail);
                         break;
                     }
 
@@ -203,9 +203,11 @@ var Parser = (function () {
         }
         return new Statement(value, tail, identifier.index);
     };
-    Parser.prototype.parseSingleStatementTail = function (stream) {
+    Parser.prototype.parseSingleStatementTail = function (stream, tail) {
         var statementList = this.parseStatement(stream);
-        var tail = new StatementTail();
+        if(!tail) {
+            tail = new StatementTail();
+        }
         tail.children = statementList;
         return tail;
     };
@@ -644,6 +646,7 @@ var MultipleIdDeclarations = (function (_super) {
 var Parameter = (function () {
     function Parameter(value) {
         this.value = value;
+        this.calculatedValue = value;
     }
     return Parameter;
 })();

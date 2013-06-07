@@ -60,7 +60,7 @@
 
             test("string literal pipe as last element of file", function () {
                 //areEqual(1, "1", "Passed!");
-                var document = parse("|string literal\r\n");
+                var document = parse("|string literal");
                 areEqual(1, document.children.length);
                 areEqual("string", document.children[0].name);
             });

@@ -52,13 +52,17 @@ class Tokenizer {
         return whitespace;
     }
 
-    consumeUntilNewLine(): string {
+    consumeUntilNewLineOrEndOfStream(): string {
         var result = "";
         var character = this.peek();
         while (!this.isNewLine(character)) {
-            this.consume();
-            result += character;
-            character = this.peek();
+            try {
+                this.consume();
+                result += character;
+                character = this.peek();
+            } catch (EndOfStreamException) {
+                break;
+            }
         }
 
         return result;
@@ -134,7 +138,7 @@ class Tokenizer {
                     this.consume();
                     return new PlusToken(this._currentIndex);
                 case '|': //string literal pipe
-                    return new StringLiteralPipeToken(this._currentIndex, this.consumeUntilNewLine());
+                    return new StringLiteralPipeToken(this._currentIndex, this.consumeUntilNewLineOrEndOfStream());
                 case '"': //quoted string literal
                     return new QuotedStringLiteralToken(this._currentIndex, this.consumeQuotedStringLiteral("\""));
                 case '\'': //quoted string literal

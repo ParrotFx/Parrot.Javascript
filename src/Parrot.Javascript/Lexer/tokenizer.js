@@ -39,13 +39,17 @@ var Tokenizer = (function () {
         }
         return whitespace;
     };
-    Tokenizer.prototype.consumeUntilNewLine = function () {
+    Tokenizer.prototype.consumeUntilNewLineOrEndOfStream = function () {
         var result = "";
         var character = this.peek();
         while(!this.isNewLine(character)) {
-            this.consume();
-            result += character;
-            character = this.peek();
+            try  {
+                this.consume();
+                result += character;
+                character = this.peek();
+            } catch (EndOfStreamException) {
+                break;
+            }
         }
         return result;
     };
@@ -145,7 +149,7 @@ var Tokenizer = (function () {
                 }
                 case '|': {
                     //string literal pipe
-                    return new StringLiteralPipeToken(this._currentIndex, this.consumeUntilNewLine());
+                    return new StringLiteralPipeToken(this._currentIndex, this.consumeUntilNewLineOrEndOfStream());
 
                 }
                 case '"': {

@@ -23,6 +23,8 @@
 *.sbr
 *.sdf
 *.opensdf
+src/**/*.js
+src/**/*.js.map
 ipch/
 obj/
 [Bb]in

@@ -1,12 +1,14 @@
 ///<reference path="./tokenType.ts" />
-class Token {
-    type: TokenType;
-    content: string;
-    index: number;
+module Parrot.Lexer {
+    export class Token {
+        Type: TokenType;
+        Content: string;
+        Index: number;
 
-    constructor(index: number, content: string, type: TokenType) {
-        this.index = index;
-        this.content = content;
-        this.type = type;
+        constructor(index: number, content: string, type: TokenType) {
+            this.Index = index;
+            this.Content = content;
+            this.Type = type;
+        }
     }
 }

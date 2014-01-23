@@ -1,43 +1,49 @@
-///<reference path="../Parser/parser.ts" />
+///<reference path="../parser.ts" />
 ///<reference path="./irenderer.ts" />
 ///<reference path="rendererProvider.ts" />
 ///<reference path="../Infrastructure/ObjectModelValueProvider.ts" />
 ///<reference path="../Infrastructure/ValueTypeProvider.ts" />
-///<reference path="../exceptions.ts" />
+///<reference path="../Infrastructure/exceptions.ts" />
 
-class StringRenderer implements IRenderer {
-    defaultChildTag: string = "";
-    rendererProvider: RendererProvider;
-    elements: string[] = ["string"];
+module Parrot.Renderers {
+    export class StringRenderer implements IRenderer {
+        public DefaultChildTag: string = "";
+        public RendererProvider: RendererProvider;
+        public Elements: string[] = ["string"];
 
-    render(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider): string {
-        //get the local model
-        this.rendererProvider = rendererProvider;
-        var result: string = "";
-        if (statement instanceof StringLiteral) {
-            var values = (<StringLiteral>statement).values
+        public Render(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider): string {
+            //get the local model
+            this.RendererProvider = rendererProvider;
+            var result: string = "";
+            if (statement instanceof StringLiteral) {
+                var values = (<StringLiteral>statement).Values
             for (var i in values) {
-                result += this.getModelValue(host, model, values[i].type, values[i].data);
+                    result += this.GetModelValue(host, model, values[i].Type, values[i].Data);
+                }
+            } else {
+                result = this.GetModelValue(host, model, StringLiteralPartType.Encoded, statement.Name);
             }
-        } else {
-            result = this.getModelValue(host, model, StringLiteralPartType.encoded, statement.name);
+
+            return result;
         }
 
-        return result;
-    }
-
-    getModelValue(host: any[], model: any, type: StringLiteralPartType, data: string): string {
-        var provider = new ObjectModelValueProvider();
-        var result = provider.getValue(host, model, null, data);
-        if (result.result == true) {
-            switch (type) {
-                case StringLiteralPartType.encoded:
-                    return encodeURI(result.value);
-                case StringLiteralPartType.raw:
-                    return result.value;
+        private GetModelValue(host: any[], model: any, type: StringLiteralPartType, data: string): string {
+            var provider = new Infrastructure.ObjectModelValueProvider();
+            var result = provider.GetValue(host, model, null, data);
+            if (result.Result == true) {
+                switch (type) {
+                    case StringLiteralPartType.Encoded:
+                        return encodeURI(result.Value);
+                    case StringLiteralPartType.Raw:
+                        return result.Value;
+                }
             }
+
+            return data;
         }
 
-        return data;
+        public BeforeRender(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider) { }
+
+        public AfterRender(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider) { }
     }
 }

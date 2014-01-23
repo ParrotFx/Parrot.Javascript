@@ -1,45 +1,30 @@
-var TokenType;
-(function (TokenType) {
-    TokenType._map = [];
-    TokenType._map[0] = "start";
-    TokenType.start = 0;
-    TokenType._map[1] = "identifier";
-    TokenType.identifier = 1;
-    TokenType._map[2] = "quotedStringLiteral";
-    TokenType.quotedStringLiteral = 2;
-    TokenType._map[3] = "stringLiteral";
-    TokenType.stringLiteral = 3;
-    TokenType._map[4] = "openBracket";
-    TokenType.openBracket = 4;
-    TokenType._map[5] = "closeBracket";
-    TokenType.closeBracket = 5;
-    TokenType._map[6] = "openParenthesis";
-    TokenType.openParenthesis = 6;
-    TokenType._map[7] = "closeParenthesis";
-    TokenType.closeParenthesis = 7;
-    TokenType._map[8] = "comma";
-    TokenType.comma = 8;
-    TokenType._map[9] = "openBrace";
-    TokenType.openBrace = 9;
-    TokenType._map[10] = "closeBrace";
-    TokenType.closeBrace = 10;
-    TokenType._map[11] = "greaterThan";
-    TokenType.greaterThan = 11;
-    TokenType._map[12] = "plus";
-    TokenType.plus = 12;
-    TokenType._map[13] = "whitespace";
-    TokenType.whitespace = 13;
-    TokenType._map[14] = "stringLiteralPipe";
-    TokenType.stringLiteralPipe = 14;
-    TokenType._map[15] = "commentLine";
-    TokenType.commentLine = 15;
-    TokenType._map[16] = "commentStart";
-    TokenType.commentStart = 16;
-    TokenType._map[17] = "commentEnd";
-    TokenType.commentEnd = 17;
-    TokenType._map[18] = "equal";
-    TokenType.equal = 18;
-    TokenType._map[19] = "at";
-    TokenType.at = 19;
-})(TokenType || (TokenType = {}));
-//@ sourceMappingURL=tokenType.js.map
+var Parrot;
+(function (Parrot) {
+    (function (Lexer) {
+        (function (TokenType) {
+            TokenType[TokenType["Start"] = 0] = "Start";
+            TokenType[TokenType["Identifier"] = 1] = "Identifier";
+            TokenType[TokenType["QuotedStringLiteral"] = 2] = "QuotedStringLiteral";
+            TokenType[TokenType["StringLiteral"] = 3] = "StringLiteral";
+            TokenType[TokenType["OpenBracket"] = 4] = "OpenBracket";
+            TokenType[TokenType["CloseBracket"] = 5] = "CloseBracket";
+            TokenType[TokenType["OpenParenthesis"] = 6] = "OpenParenthesis";
+            TokenType[TokenType["CloseParenthesis"] = 7] = "CloseParenthesis";
+            TokenType[TokenType["Comma"] = 8] = "Comma";
+            TokenType[TokenType["OpenBrace"] = 9] = "OpenBrace";
+            TokenType[TokenType["CloseBrace"] = 10] = "CloseBrace";
+            TokenType[TokenType["GreaterThan"] = 11] = "GreaterThan";
+            TokenType[TokenType["Plus"] = 12] = "Plus";
+            TokenType[TokenType["Whitespace"] = 13] = "Whitespace";
+            TokenType[TokenType["StringLiteralPipe"] = 14] = "StringLiteralPipe";
+            TokenType[TokenType["CommentLine"] = 15] = "CommentLine";
+            TokenType[TokenType["CommentStart"] = 16] = "CommentStart";
+            TokenType[TokenType["CommentEnd"] = 17] = "CommentEnd";
+            TokenType[TokenType["Equal"] = 18] = "Equal";
+            TokenType[TokenType["At"] = 19] = "At";
+        })(Lexer.TokenType || (Lexer.TokenType = {}));
+        var TokenType = Lexer.TokenType;
+    })(Parrot.Lexer || (Parrot.Lexer = {}));
+    var Lexer = Parrot.Lexer;
+})(Parrot || (Parrot = {}));
+//# sourceMappingURL=tokenType.js.map

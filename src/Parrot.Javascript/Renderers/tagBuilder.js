@@ -1,86 +1,92 @@
-///<reference path="../exceptions.ts" />
-var TagRenderMode;
-(function (TagRenderMode) {
-    TagRenderMode._map = [];
-    TagRenderMode._map[0] = "startTag";
-    TagRenderMode.startTag = 0;
-    TagRenderMode._map[1] = "endTag";
-    TagRenderMode.endTag = 1;
-    TagRenderMode._map[2] = "selfClosing";
-    TagRenderMode.selfClosing = 2;
-    TagRenderMode._map[3] = "normal";
-    TagRenderMode.normal = 3;
-})(TagRenderMode || (TagRenderMode = {}));
-var TagBuilder = (function () {
-    function TagBuilder(name) {
-        this.name = name;
-        this.innerHtml = "";
-        this.attributes = [];
-    }
-    TagBuilder.prototype.toString = function (renderMode) {
-        switch(renderMode) {
-            case TagRenderMode.startTag: {
-                return "<" + this.name + this.appendAttributes() + ">";
+var Parrot;
+(function (Parrot) {
+    ///<reference path="../Infrastructure/exceptions.ts" />
+    (function (Renderers) {
+        (function (TagRenderMode) {
+            TagRenderMode[TagRenderMode["StartTag"] = 0] = "StartTag";
+            TagRenderMode[TagRenderMode["EndTag"] = 1] = "EndTag";
+            TagRenderMode[TagRenderMode["SelfClosing"] = 2] = "SelfClosing";
+            TagRenderMode[TagRenderMode["Normal"] = 3] = "Normal";
+        })(Renderers.TagRenderMode || (Renderers.TagRenderMode = {}));
+        var TagRenderMode = Renderers.TagRenderMode;
 
+        var TagBuilder = (function () {
+            function TagBuilder(name) {
+                this.Name = name;
+                this.InnerHtml = "";
+                this.Attributes = [];
             }
-            case TagRenderMode.endTag: {
-                return "</" + this.name + ">";
+            TagBuilder.prototype.toString = function (renderMode) {
+                switch (renderMode) {
+                    case 0 /* StartTag */:
+                        return "<" + this.Name + this.AppendAttributes() + ">";
+                    case 1 /* EndTag */:
+                        return "</" + this.Name + ">";
+                    case 2 /* SelfClosing */:
+                        return "<" + this.Name + this.AppendAttributes() + " />";
+                    default:
+                        return "<" + this.Name + this.AppendAttributes() + this.InnerHtml + "</" + this.Name + ">";
+                }
+            };
 
-            }
-            case TagRenderMode.selfClosing: {
-                return "<" + this.name + this.appendAttributes() + " />";
+            TagBuilder.prototype.AppendAttributes = function () {
+                var render = "";
+                for (var i in this.Attributes) {
+                    var attribute = this.Attributes[i];
+                    var key = i;
+                    var value = attribute;
 
-            }
-            default: {
-                return "<" + this.name + this.appendAttributes() + this.innerHtml + "</" + this.name + ">";
+                    if (key == "id" && value == null || value.Length == 0) {
+                        continue;
+                    }
 
-            }
-        }
-    };
-    TagBuilder.prototype.appendAttributes = function () {
-        var render = "";
-        for(var i in this.attributes) {
-            var attribute = this.attributes[i];
-            var key = i;
-            var value = attribute;
-            if(key == "id" && value == null || value.length == 0) {
-                continue;
-            }
-            if(value != null) {
-                value = this.htmlAttributeEncode(value);
-            } else {
-                value = key;
-            }
-            render += " " + key + "=\"" + value + "\"";
-        }
-        return render;
-    };
-    TagBuilder.prototype.htmlAttributeEncode = function (value) {
-        return value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#39;");
-    };
-    TagBuilder.prototype.mergeAttribute = function (key, value, replaceExisting) {
-        if(key == null || key.length == 0) {
-            throw new ArgumentException("key");
-        }
-        if(replaceExisting || !this.containsKey(this.attributes, key)) {
-            this.attributes[key] = value;
-        }
-    };
-    TagBuilder.prototype.containsKey = function (source, key) {
-        for(var i in source) {
-            if(i == key) {
-                return true;
-            }
-        }
-        return false;
-    };
-    TagBuilder.prototype.addCssClass = function (value) {
-        if(this.attributes["class"] != undefined && this.attributes["class"] != null) {
-            this.attributes["class"] = value + " " + this.attributes["class"];
-        } else {
-            this.attributes["class"] = value;
-        }
-    };
-    return TagBuilder;
-})();
-//@ sourceMappingURL=tagBuilder.js.map
+                    if (value != null) {
+                        value = this.HtmlAttributeEncode(value);
+                    } else {
+                        value = key;
+                    }
+
+                    render += " " + key + "=\"" + value + "\"";
+                }
+
+                return render;
+            };
+
+            TagBuilder.prototype.HtmlAttributeEncode = function (value) {
+                return value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#39;");
+            };
+
+            TagBuilder.prototype.MergeAttribute = function (key, value, replaceExisting) {
+                if (key == null || key.length == 0) {
+                    throw new Parrot.Infrastructure.ArgumentException("key");
+                }
+
+                if (replaceExisting || !this.ContainsKey(this.Attributes, key)) {
+                    this.Attributes[key] = value;
+                }
+            };
+
+            TagBuilder.prototype.ContainsKey = function (source, key) {
+                for (var i in source) {
+                    if (i == key) {
+                        return true;
+                    }
+                }
+
+                return false;
+            };
+
+            TagBuilder.prototype.AddCssClass = function (value) {
+                if (this.Attributes["class"] != undefined && this.Attributes["class"] != null) {
+                    this.Attributes["class"] = value + " " + this.Attributes["class"];
+                } else {
+                    this.Attributes["class"] = value;
+                }
+            };
+            return TagBuilder;
+        })();
+        Renderers.TagBuilder = TagBuilder;
+    })(Parrot.Renderers || (Parrot.Renderers = {}));
+    var Renderers = Parrot.Renderers;
+})(Parrot || (Parrot = {}));
+//# sourceMappingURL=tagBuilder.js.map

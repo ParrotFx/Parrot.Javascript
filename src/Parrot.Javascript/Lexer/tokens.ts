@@ -1,91 +1,93 @@
 /// <reference path="token.ts" />
 /// <reference path="tokenType.ts" />
-class AtToken extends Token {
-    constructor(index: number) {
-        super(index, "@", TokenType.at);
+module Parrot.Lexer {
+    export class AtToken extends Token {
+        constructor(index: number) {
+            super(index, "@", TokenType.At);
+        }
     }
-}
 
-class QuotedStringLiteralToken extends Token {
-    constructor(index: number, content: string) {
-        super(index, content, TokenType.quotedStringLiteral);
+    export class QuotedStringLiteralToken extends Token {
+        constructor(index: number, content: string) {
+            super(index, content, TokenType.QuotedStringLiteral);
+        }
     }
-}
 
-class StringLiteralPipeToken extends Token {
-    constructor(index: number, content: string) {
-        super(index, content, TokenType.stringLiteralPipe);
+    export class StringLiteralPipeToken extends Token {
+        constructor(index: number, content: string) {
+            super(index, content, TokenType.StringLiteralPipe);
+        }
     }
-}
 
-class PlusToken extends Token {
-    constructor(index: number) {
-        super(index, "+", TokenType.plus);
+    export class PlusToken extends Token {
+        constructor(index: number) {
+            super(index, "+", TokenType.Plus);
+        }
     }
-}
 
-class GreaterThanToken extends Token {
-    constructor(index: number) {
-        super(index, ">", TokenType.greaterThan);
+    export class GreaterThanToken extends Token {
+        constructor(index: number) {
+            super(index, ">", TokenType.GreaterThan);
+        }
     }
-}
 
-class CloseParenthesisToken extends Token {
-    constructor(index: number) {
-        super(index, ")", TokenType.closeParenthesis);
+    export class CloseParenthesisToken extends Token {
+        constructor(index: number) {
+            super(index, ")", TokenType.CloseParenthesis);
+        }
     }
-}
 
-class CloseBracesToken extends Token {
-    constructor(index: number) {
-        super(index, "}", TokenType.closeBrace);
+    export class CloseBracesToken extends Token {
+        constructor(index: number) {
+            super(index, "}", TokenType.CloseBrace);
+        }
     }
-}
 
-class OpenBracesToken extends Token {
-    constructor(index: number) {
-        super(index, "{", TokenType.openBrace);
+    export class OpenBracesToken extends Token {
+        constructor(index: number) {
+            super(index, "{", TokenType.OpenBrace);
+        }
     }
-}
 
-class EqualToken extends Token {
-    constructor(index: number) {
-        super(index, "=", TokenType.equal);
+    export class EqualToken extends Token {
+        constructor(index: number) {
+            super(index, "=", TokenType.Equal);
+        }
     }
-}
 
-class CloseBracketToken extends Token {
-    constructor(index: number) {
-        super(index, "]", TokenType.closeBracket);
+    export class CloseBracketToken extends Token {
+        constructor(index: number) {
+            super(index, "]", TokenType.CloseBracket);
+        }
     }
-}
 
-class OpenBracketToken extends Token {
-    constructor(index: number) {
-        super(index, "[", TokenType.openBracket);
+    export class OpenBracketToken extends Token {
+        constructor(index: number) {
+            super(index, "[", TokenType.OpenBracket);
+        }
     }
-}
 
-class OpenParenthesisToken extends Token {
-    constructor(index: number) {
-        super(index, "(", TokenType.openParenthesis);
+    export class OpenParenthesisToken extends Token {
+        constructor(index: number) {
+            super(index, "(", TokenType.OpenParenthesis);
+        }
     }
-}
 
-class CommaToken extends Token {
-    constructor(index: number) {
-        super(index, ",", TokenType.comma);
+    export class CommaToken extends Token {
+        constructor(index: number) {
+            super(index, ",", TokenType.Comma);
+        }
     }
-}
 
-class IdentifierToken extends Token {
-    constructor(index: number, content: string, type: TokenType) {
-        super(index, content, type);
+    export class IdentifierToken extends Token {
+        constructor(index: number, content: string, type: TokenType) {
+            super(index, content, type);
+        }
     }
-}
 
-class WhitespaceToken extends Token {
-    constructor(index: number, content: string, type: TokenType) {
-        super(index, content, type);
+    export class WhitespaceToken extends Token {
+        constructor(index: number, content: string, type: TokenType) {
+            super(index, content, type);
+        }
     }
 }

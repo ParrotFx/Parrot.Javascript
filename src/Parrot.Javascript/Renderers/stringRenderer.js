@@ -1,47 +1,57 @@
-///<reference path="../Parser/parser.ts" />
+///<reference path="../parser.ts" />
 ///<reference path="./irenderer.ts" />
 ///<reference path="rendererProvider.ts" />
 ///<reference path="../Infrastructure/ObjectModelValueProvider.ts" />
 ///<reference path="../Infrastructure/ValueTypeProvider.ts" />
-///<reference path="../exceptions.ts" />
-var StringRenderer = (function () {
-    function StringRenderer() {
-        this.defaultChildTag = "";
-        this.elements = [
-            "string"
-        ];
-    }
-    StringRenderer.prototype.render = function (statement, host, model, rendererProvider) {
-        //get the local model
-        this.rendererProvider = rendererProvider;
-        var result = "";
-        if(statement instanceof StringLiteral) {
-            var values = (statement).values;
-            for(var i in values) {
-                result += this.getModelValue(host, model, values[i].type, values[i].data);
+///<reference path="../Infrastructure/exceptions.ts" />
+var Parrot;
+(function (Parrot) {
+    (function (Renderers) {
+        var StringRenderer = (function () {
+            function StringRenderer() {
+                this.DefaultChildTag = "";
+                this.Elements = ["string"];
             }
-        } else {
-            result = this.getModelValue(host, model, StringLiteralPartType.encoded, statement.name);
-        }
-        return result;
-    };
-    StringRenderer.prototype.getModelValue = function (host, model, type, data) {
-        var provider = new ObjectModelValueProvider();
-        var result = provider.getValue(host, model, null, data);
-        if(result.result == true) {
-            switch(type) {
-                case StringLiteralPartType.encoded: {
-                    return encodeURI(result.value);
-
+            StringRenderer.prototype.Render = function (statement, host, model, rendererProvider) {
+                //get the local model
+                this.RendererProvider = rendererProvider;
+                var result = "";
+                if (statement instanceof Parrot.StringLiteral) {
+                    var values = statement.Values;
+                    for (var i in values) {
+                        result += this.GetModelValue(host, model, values[i].Type, values[i].Data);
+                    }
+                } else {
+                    result = this.GetModelValue(host, model, 1 /* Encoded */, statement.Name);
                 }
-                case StringLiteralPartType.raw: {
-                    return result.value;
 
+                return result;
+            };
+
+            StringRenderer.prototype.GetModelValue = function (host, model, type, data) {
+                var provider = new Parrot.Infrastructure.ObjectModelValueProvider();
+                var result = provider.GetValue(host, model, null, data);
+                if (result.Result == true) {
+                    switch (type) {
+                        case 1 /* Encoded */:
+                            return encodeURI(result.Value);
+                        case 2 /* Raw */:
+                            return result.Value;
+                    }
                 }
-            }
-        }
-        return data;
-    };
-    return StringRenderer;
-})();
-//@ sourceMappingURL=stringRenderer.js.map
+
+                return data;
+            };
+
+            StringRenderer.prototype.BeforeRender = function (statement, host, model, rendererProvider) {
+            };
+
+            StringRenderer.prototype.AfterRender = function (statement, host, model, rendererProvider) {
+            };
+            return StringRenderer;
+        })();
+        Renderers.StringRenderer = StringRenderer;
+    })(Parrot.Renderers || (Parrot.Renderers = {}));
+    var Renderers = Parrot.Renderers;
+})(Parrot || (Parrot = {}));
+//# sourceMappingURL=stringRenderer.js.map

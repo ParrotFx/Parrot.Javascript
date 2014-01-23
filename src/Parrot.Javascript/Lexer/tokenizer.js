@@ -1,219 +1,207 @@
-///<reference path="tokens.ts" />
-var Tokenizer = (function () {
-    function Tokenizer(source) {
-        this._source = source;
-        this._currentIndex = 0;
-    }
-    Tokenizer.prototype.hasAvailableTokens = function () {
-        return this._currentIndex < this._source.length;
-    };
-    Tokenizer.prototype.peek = function () {
-        var character = this._source.charAt(this._currentIndex);
-        return character;
-    };
-    Tokenizer.prototype.consume = function () {
-        if(this._currentIndex >= this._source.length) {
-            throw new EndOfStreamException();
-        }
-        var character = this._source.charAt(this._currentIndex);
-        this._currentIndex++;
-        return character;
-    };
-    Tokenizer.prototype.consumeIdentifier = function () {
-        var identifier = "";
-        var character = this.peek();
-        while(this.isIdTail(character)) {
-            this.consume();
-            identifier += character;
-            character = this.peek();
-        }
-        return identifier;
-    };
-    Tokenizer.prototype.consumeWhitespace = function () {
-        var whitespace = "";
-        var character = this.peek();
-        while(this.isWhitespace(character)) {
-            this.consume();
-            whitespace += character;
-            character = this.peek();
-        }
-        return whitespace;
-    };
-    Tokenizer.prototype.consumeUntilNewLineOrEndOfStream = function () {
-        var result = "";
-        var character = this.peek();
-        while(!this.isNewLine(character)) {
-            try  {
-                this.consume();
-                result += character;
-                character = this.peek();
-            } catch (EndOfStreamException) {
-                break;
+var Parrot;
+(function (Parrot) {
+    ///<reference path="tokens.ts" />
+    (function (Lexer) {
+        var Tokenizer = (function () {
+            function Tokenizer(source) {
+                this._source = source;
+                this._currentIndex = 0;
             }
-        }
-        return result;
-    };
-    Tokenizer.prototype.consumeQuotedStringLiteral = function (quote) {
-        var result = this.consume();
-        ; ;
-        var character = this.peek();
-        while(true) {
-            while(character != quote) {
-                this.consume();
-                result += character;
-                character = this.peek();
+            Tokenizer.prototype.HasAvailableTokens = function () {
+                return this._currentIndex < this._source.length;
+            };
+
+            Tokenizer.prototype.Peek = function () {
+                var character = this._source.charAt(this._currentIndex);
+                return character;
+            };
+
+            Tokenizer.prototype.Consume = function () {
+                if (this._currentIndex >= this._source.length) {
+                    throw new EndOfStreamException();
+                }
+
+                var character = this._source.charAt(this._currentIndex);
+                this._currentIndex++;
+                return character;
+            };
+
+            Tokenizer.prototype.ConsumeIdentifier = function () {
+                var identifier = "";
+                var character = this.Peek();
+                while (this.IsIdTail(character)) {
+                    this.Consume();
+                    identifier += character;
+                    character = this.Peek();
+                }
+
+                return identifier;
+            };
+
+            Tokenizer.prototype.ConsumeWhitespace = function () {
+                var whitespace = "";
+                var character = this.Peek();
+                while (this.IsWhitespace(character)) {
+                    this.Consume();
+                    whitespace += character;
+                    character = this.Peek();
+                }
+
+                return whitespace;
+            };
+
+            Tokenizer.prototype.ConsumeUntilNewLineOrEndOfStream = function () {
+                var result = "";
+                var character = this.Peek();
+                while (!this.IsNewLine(character)) {
+                    try  {
+                        this.Consume();
+                        result += character;
+                        character = this.Peek();
+                    } catch (EndOfStreamException) {
+                        break;
+                    }
+                }
+
+                return result;
+            };
+
+            Tokenizer.prototype.ConsumeQuotedStringLiteral = function (quote) {
+                var result = this.Consume();
+                ;
+                var character = this.Peek();
+                while (true) {
+                    while (character != quote) {
+                        this.Consume();
+                        result += character;
+                        character = this.Peek();
+                    }
+                    result += this.Consume();
+                    if (this.Peek() != quote) {
+                        break;
+                    }
+                    this.Consume();
+                    character = this.Peek();
+                }
+
+                //result += this.Consume();
+                return result;
+            };
+
+            Tokenizer.prototype.IsNewLine = function (character) {
+                return character == "\r" || character == "\n";
+            };
+
+            Tokenizer.prototype.GetNextToken = function () {
+                if (this.HasAvailableTokens()) {
+                    var currentCharacter = this.Peek();
+
+                    if (this.IsIdentifierHead(currentCharacter)) {
+                        var token = new Parrot.Lexer.IdentifierToken(this._currentIndex, this.ConsumeIdentifier(), 1 /* Identifier */);
+                        return token;
+                    }
+
+                    if (this.IsWhitespace(currentCharacter)) {
+                        return new Parrot.Lexer.WhitespaceToken(this._currentIndex, this.ConsumeWhitespace(), 13 /* Whitespace */);
+                    }
+
+                    switch (currentCharacter) {
+                        case ',':
+                            this.Consume();
+                            return new Parrot.Lexer.CommaToken(this._currentIndex);
+                        case '(':
+                            this.Consume();
+                            return new Parrot.Lexer.OpenParenthesisToken(this._currentIndex);
+                        case ')':
+                            this.Consume();
+                            return new Parrot.Lexer.CloseParenthesisToken(this._currentIndex);
+                        case '[':
+                            this.Consume();
+                            return new Parrot.Lexer.OpenBracketToken(this._currentIndex);
+                        case ']':
+                            this.Consume();
+                            return new Parrot.Lexer.CloseBracketToken(this._currentIndex);
+                        case '=':
+                            this.Consume();
+                            return new Parrot.Lexer.EqualToken(this._currentIndex);
+                        case '{':
+                            this.Consume();
+                            return new Parrot.Lexer.OpenBracesToken(this._currentIndex);
+                        case '}':
+                            this.Consume();
+                            return new Parrot.Lexer.CloseBracesToken(this._currentIndex);
+                        case '>':
+                            this.Consume();
+                            return new Parrot.Lexer.GreaterThanToken(this._currentIndex);
+                        case '+':
+                            this.Consume();
+                            return new Parrot.Lexer.PlusToken(this._currentIndex);
+                        case '|':
+                            return new Parrot.Lexer.StringLiteralPipeToken(this._currentIndex, this.ConsumeUntilNewLineOrEndOfStream());
+                        case '"':
+                            return new Parrot.Lexer.QuotedStringLiteralToken(this._currentIndex, this.ConsumeQuotedStringLiteral("\""));
+                        case '\'':
+                            return new Parrot.Lexer.QuotedStringLiteralToken(this._currentIndex, this.ConsumeQuotedStringLiteral("\'"));
+                        case '@':
+                            this.Consume();
+                            return new Parrot.Lexer.AtToken(this._currentIndex);
+                        case '\0':
+                            return null;
+                        default:
+                            throw new UnexpectedTokenException("Unexpected token: " + currentCharacter);
+                    }
+                }
+
+                return null;
+            };
+
+            Tokenizer.prototype.IsWhitespace = function (character) {
+                return character == "\r" || character == "\n" || character == " " || character == "\f" || character == "\t" || character == "\u000B";
+            };
+
+            Tokenizer.prototype.IsIdentifierHead = function (character) {
+                var isLetter = /[a-zA-Z]/;
+                return character.match(isLetter) != null || character == "_" || character == "#" || character == ".";
+            };
+
+            Tokenizer.prototype.IsIdTail = function (character) {
+                var isNumber = /[0-9]/;
+                return character.match(isNumber) != null || this.IsIdentifierHead(character) || character == ":" || character == "-";
+            };
+
+            Tokenizer.prototype.Tokenize = function () {
+                var token;
+                var _tokens = [];
+                while ((token = this.GetNextToken()) != null) {
+                    _tokens.push(token);
+                }
+
+                return _tokens;
+            };
+
+            Tokenizer.prototype.Tokens = function () {
+                return this.Tokenize();
+            };
+            return Tokenizer;
+        })();
+        Lexer.Tokenizer = Tokenizer;
+
+        var EndOfStreamException = (function () {
+            function EndOfStreamException() {
+                this.Message = "Unexpected end of stream";
             }
-            result += this.consume();
-            if(this.peek() != quote) {
-                break;
+            return EndOfStreamException;
+        })();
+        Lexer.EndOfStreamException = EndOfStreamException;
+
+        var UnexpectedTokenException = (function () {
+            function UnexpectedTokenException(message) {
+                this.Message = message;
             }
-            this.consume();
-            character = this.peek();
-        }
-        //result += this.consume();
-        return result;
-    };
-    Tokenizer.prototype.isNewLine = function (character) {
-        return character == "\r" || character == "\n";
-    };
-    Tokenizer.prototype.getNextToken = function () {
-        if(this.hasAvailableTokens()) {
-            var currentCharacter = this.peek();
-            if(this.isIdentifierHead(currentCharacter)) {
-                var token = new IdentifierToken(this._currentIndex, this.consumeIdentifier(), TokenType.identifier);
-                return token;
-            }
-            if(this.isWhitespace(currentCharacter)) {
-                return new WhitespaceToken(this._currentIndex, this.consumeWhitespace(), TokenType.whitespace);
-            }
-            switch(currentCharacter) {
-                case ',': {
-                    //this is for the future
-                    this.consume();
-                    return new CommaToken(this._currentIndex);
-
-                }
-                case '(': {
-                    //parameter list start
-                    this.consume();
-                    return new OpenParenthesisToken(this._currentIndex);
-
-                }
-                case ')': {
-                    //parameter list end
-                    this.consume();
-                    return new CloseParenthesisToken(this._currentIndex);
-
-                }
-                case '[': {
-                    //attribute list start
-                    this.consume();
-                    return new OpenBracketToken(this._currentIndex);
-
-                }
-                case ']': {
-                    //attribute list end
-                    this.consume();
-                    return new CloseBracketToken(this._currentIndex);
-
-                }
-                case '=': {
-                    //attribute assignment, raw output
-                    this.consume();
-                    return new EqualToken(this._currentIndex);
-
-                }
-                case '{': {
-                    //child block start
-                    this.consume();
-                    return new OpenBracesToken(this._currentIndex);
-
-                }
-                case '}': {
-                    //child block end
-                    this.consume();
-                    return new CloseBracesToken(this._currentIndex);
-
-                }
-                case '>': {
-                    //child assignment
-                    this.consume();
-                    return new GreaterThanToken(this._currentIndex);
-
-                }
-                case '+': {
-                    //sibling assignment
-                    this.consume();
-                    return new PlusToken(this._currentIndex);
-
-                }
-                case '|': {
-                    //string literal pipe
-                    return new StringLiteralPipeToken(this._currentIndex, this.consumeUntilNewLineOrEndOfStream());
-
-                }
-                case '"': {
-                    //quoted string literal
-                    return new QuotedStringLiteralToken(this._currentIndex, this.consumeQuotedStringLiteral("\""));
-
-                }
-                case '\'': {
-                    //quoted string literal
-                    return new QuotedStringLiteralToken(this._currentIndex, this.consumeQuotedStringLiteral("\'"));
-
-                }
-                case '@': {
-                    //Encoded output
-                    this.consume();
-                    return new AtToken(this._currentIndex);
-
-                }
-                case '\0': {
-                    return null;
-
-                }
-                default: {
-                    throw new UnexpectedTokenException("Unexpected token: " + currentCharacter);
-
-                }
-            }
-        }
-        return null;
-    };
-    Tokenizer.prototype.isWhitespace = function (character) {
-        return character == "\r" || character == "\n" || character == " " || character == "\f" || character == "\t" || character == "\u000B";
-    };
-    Tokenizer.prototype.isIdentifierHead = function (character) {
-        var isLetter = /[a-zA-Z]/;
-        return character.match(isLetter) || character == "_" || character == "#" || character == ".";
-    };
-    Tokenizer.prototype.isIdTail = function (character) {
-        var isNumber = /[0-9]/;
-        return character.match(isNumber) || this.isIdentifierHead(character) || character == ":" || character == "-";
-    };
-    Tokenizer.prototype.tokenize = function () {
-        var token;
-        var _tokens = [];
-        while((token = this.getNextToken()) != null) {
-            _tokens.push(token);
-        }
-        return _tokens;
-    };
-    Tokenizer.prototype.tokens = function () {
-        return this.tokenize();
-    };
-    return Tokenizer;
-})();
-var EndOfStreamException = (function () {
-    function EndOfStreamException() {
-        this.message = "Unexpected end of stream";
-    }
-    return EndOfStreamException;
-})();
-var UnexpectedTokenException = (function () {
-    function UnexpectedTokenException(message) {
-        this.message = message;
-    }
-    return UnexpectedTokenException;
-})();
-//@ sourceMappingURL=tokenizer.js.map
+            return UnexpectedTokenException;
+        })();
+        Lexer.UnexpectedTokenException = UnexpectedTokenException;
+    })(Parrot.Lexer || (Parrot.Lexer = {}));
+    var Lexer = Parrot.Lexer;
+})(Parrot || (Parrot = {}));
+//# sourceMappingURL=tokenizer.js.map

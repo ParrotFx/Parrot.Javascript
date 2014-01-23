@@ -3,14 +3,14 @@
 <head>
     <meta charset="utf-8">
     <title>parser tests</title>
-    <link rel="stylesheet" href="http://code.jquery.com/qunit/qunit-1.10.0.css">
+    <link rel="stylesheet" href="http://code.jquery.Com/qunit/qunit-1.10.0.css">
     <script type="text/javascript" src="../Lexer/token.js"></script>
     <script type="text/javascript" src="../Lexer/tokenizer.js"></script>
     <script type="text/javascript" src="../Lexer/tokens.js"></script>
     <script type="text/javascript" src="../Lexer/tokenType.js"></script>
-    <script type="text/javascript" src="../Parser/parserError.js"></script>
-    <script type="text/javascript" src="../Parser/parser.js"></script>
-    <script type="text/javascript" src="../Parser/stream.js"></script>
+    <script type="text/javascript" src="../parserError.js"></script>
+    <script type="text/javascript" src="../parser.js"></script>
+    <script type="text/javascript" src="../stream.js"></script>
     <script type="text/javascript" src="../Renderers/baseRenderer.js"></script>
     <script type="text/javascript" src="../Renderers/docTypeRenderer.js"></script>
     <script type="text/javascript" src="../Renderers/htmlRenderer.js"></script>
@@ -20,14 +20,14 @@
     <script type="text/javascript" src="../Renderers/tagBuilder.js"></script>
     <script type="text/javascript" src="../Renderers/parrotDocumentView.js"></script>
     <script type="text/javascript" src="../Renderers/rendererProvider.js"></script>
-    <script type="text/javascript" src="../exceptions.js"></script>
+    <script type="text/javascript" src="../Infrastructure/exceptions.js"></script>
     <script type="text/javascript" src="../Infrastructure/ObjectModelValueProvider.js"></script>
     <script type="text/javascript" src="../Infrastructure/ValueTypeProvider.js"></script>
     <script type="text/javascript" src="../Infrastructure/Locals.js"></script>
 </head>
 <body>
     <div id="qunit"></div>
-    <script src="http://code.jquery.com/qunit/qunit-1.11.0.js"></script>
+    <script src="http://code.jquery.Com/qunit/qunit-1.11.0.js"></script>
     <script>
         (function () {
             String.prototype.format = function () {
@@ -40,8 +40,8 @@
             };
 
             function parse(template) {
-                var parser = new Parser();
-                return parser.parse(template);
+                var parser = new Parrot.Parser();
+                return parser.Parse(template);
             }
 
             function areEqual(a, b) {
@@ -61,14 +61,14 @@
             test("string literal pipe as last element of file", function () {
                 //areEqual(1, "1", "Passed!");
                 var document = parse("|string literal");
-                areEqual(1, document.children.length);
-                areEqual("string", document.children[0].name);
+                areEqual(1, document.Children.length);
+                areEqual("string", document.Children[0].Name);
             });
 
             test("string literal pipe child followed by string literal pipe child", function () {
                 var document = parse(["container {", "  style[type='text/css'] |label { margin-right: .5em; font-weight: bold; }", "  title | Parrot Test Drive", "}"].join("\n"));
-                areEqual(1, document.children.length);
-                areEqual(2, document.children[0].children.length);
+                areEqual(1, document.Children.length);
+                areEqual(2, document.Children[0].Children.length);
             });
 
             test("identifier parts tests", function () {
@@ -77,17 +77,17 @@
                     switch (character) {
                         case ":":
                             {
-                                return IdentifierType.type;
+                                return Parrot.IdentifierType.Type;
 
                             }
                         case "#":
                             {
-                                return IdentifierType.id;
+                                return Parrot.IdentifierType.Id;
 
                             }
                         case ".":
                             {
-                                return IdentifierType.class;
+                                return Parrot.IdentifierType.Class;
 
                             }
                     }
@@ -96,32 +96,32 @@
 
                 function getIdentifierParts(source, callback) {
                     var index = 0;
-                    var partType = IdentifierType.literal;
-                    var nextType = IdentifierType.none;
+                    var partType = Parrot.IdentifierType.Literal;
+                    var nextType = Parrot.IdentifierType.None;
                     for (var i = 0; i < source.length; i++) {
                         nextType = identifierTypeFromCharacter(source.charAt(i), nextType);
-                        if (nextType != IdentifierType.none) {
-                            var identifier = new Identifier();
-                            identifier.name = source.substring(index, index + (i - index));
-                            identifier.type = partType;
-                            identifier.index = index;
-                            identifier.length = i - index;
+                        if (nextType != Parrot.IdentifierType.None) {
+                            var identifier = new Parrot.Identifier();
+                            identifier.Name = source.substring(index, index + (i - index));
+                            identifier.Type = partType;
+                            identifier.Index = index;
+                            identifier.Length = i - index;
                             callback(identifier);
                             index = i + 1;
                             partType = nextType;
-                            nextType = IdentifierType.none;
+                            nextType = Parrot.IdentifierType.None;
                         }
                     }
-                    var identifier = new Identifier();
-                    identifier.name = source.substring(index);
-                    identifier.type = partType;
-                    identifier.index = index;
+                    var identifier = new Parrot.Identifier();
+                    identifier.Name = source.substring(index);
+                    identifier.Type = partType;
+                    identifier.Index = index;
                     callback(identifier);
                 }
 
                 function indexOfAny(source, chars) {
                     for (var i in chars) {
-                        var index = source.indexOf(chars[i]);
+                        var index = source.IndexOf(chars[i]);
                         if (index != -1) {
                             return index;
                         }
@@ -133,15 +133,15 @@
                 getIdentifierParts("input:submit#id.class", function (part) { results.push(part); });
 
                 areEqual(results.length, 4);
-                areEqual("input", results[0].name);
-                areEqual("submit", results[1].name);
-                areEqual("id", results[2].name);
-                areEqual("class", results[3].name);
+                areEqual("input", results[0].Name);
+                areEqual("submit", results[1].Name);
+                areEqual("id", results[2].Name);
+                areEqual("class", results[3].Name);
 
-                areEqual(2, results[0].type);
-                areEqual(3, results[1].type);
-                areEqual(0, results[2].type);
-                areEqual(1, results[3].type);
+                areEqual(2, results[0].Type);
+                areEqual(3, results[1].Type);
+                areEqual(0, results[2].Type);
+                areEqual(1, results[3].Type);
             });
 
             test("string with at folowed by equals", function () {
@@ -151,52 +151,52 @@
 
             test("string literal", function () {
                 var delimiters = [];
-                delimiters["@"] = StringLiteralPartType.encoded;
-                delimiters["="] = StringLiteralPartType.raw;
+                delimiters["@"] = Parrot.StringLiteralPartType.Encoded;
+                delimiters["="] = Parrot.StringLiteralPartType.Raw;
                 for (var i in delimiters) {
                     var delimiter = i;
                     var encoding = delimiters[i];
-                    var parts = new StringLiteral("'this {0}is awesome {0}right'".format(delimiter)).values;
+                    var parts = new Parrot.StringLiteral("'this {0}is awesome {0}right'".format(delimiter)).Values;
 
                     areEqual(4, parts.length);
-                    areEqual(StringLiteralPartType.literal, parts[0].type);
-                    areEqual(encoding, parts[1].type);
-                    areEqual(StringLiteralPartType.literal, parts[2].type);
+                    areEqual(Parrot.StringLiteralPartType.Literal, parts[0].Type);
+                    areEqual(encoding, parts[1].Type);
+                    areEqual(Parrot.StringLiteralPartType.Literal, parts[2].Type);
 
-                    areEqual("this ", parts[0].data);
-                    areEqual("is", parts[1].data);
-                    areEqual(" awesome ", parts[2].data);
-                    areEqual("right", parts[3].data);
+                    areEqual("this ", parts[0].Data);
+                    areEqual("is", parts[1].Data);
+                    areEqual(" awesome ", parts[2].Data);
+                    areEqual("right", parts[3].Data);
 
-                    parts = new StringLiteral("'this contains a {0} but not a keyword'".format(delimiter)).values;
+                    parts = new Parrot.StringLiteral("'this contains a {0} but not a keyword'".format(delimiter)).Values;
                     areEqual(1, parts.length);
-                    areEqual(StringLiteralPartType.literal, parts[0].type);
+                    areEqual(Parrot.StringLiteralPartType.Literal, parts[0].Type);
 
-                    parts = new StringLiteral("'{0}keyword_only'".format(delimiter)).values;
+                    parts = new Parrot.StringLiteral("'{0}keyword_only'".format(delimiter)).Values;
                     areEqual(1, parts.length);
-                    areEqual(encoding, parts[0].type);
-                    areEqual("keyword_only", parts[0].data);
+                    areEqual(encoding, parts[0].Type);
+                    areEqual("keyword_only", parts[0].Data);
 
-                    parts = new StringLiteral("'{0}keyword_first followed by more words'".format(delimiter)).values;
+                    parts = new Parrot.StringLiteral("'{0}keyword_first followed by more words'".format(delimiter)).Values;
                     areEqual(2, parts.length);
-                    areEqual(encoding, parts[0].type);
-                    areEqual(StringLiteralPartType.literal, parts[1].type);
+                    areEqual(encoding, parts[0].Type);
+                    areEqual(Parrot.StringLiteralPartType.Literal, parts[1].Type);
 
-                    parts = new StringLiteral("'{0}keyword.with.dot'".format(delimiter)).values;
+                    parts = new Parrot.StringLiteral("'{0}keyword.with.dot'".format(delimiter)).Values;
                     areEqual(1, parts.length);
-                    areEqual(encoding, parts[0].type);
-                    areEqual("keyword.with.dot", parts[0].data);
+                    areEqual(encoding, parts[0].Type);
+                    areEqual("keyword.with.dot", parts[0].Data);
 
-                    parts = new StringLiteral("'this is an {0}{0} escaped delimiter'".format(delimiter)).values;
+                    parts = new Parrot.StringLiteral("'this is an {0}{0} escaped delimiter'".format(delimiter)).Values;
                     areEqual(1, parts.length);
-                    areEqual("this is an {0} escaped delimiter".format(delimiter), parts[0].data);
+                    areEqual("this is an {0} escaped delimiter".format(delimiter), parts[0].Data);
 
-                    parts = new StringLiteral("'{0}keyword_only_endsin. a dot'".format(delimiter)).values;
+                    parts = new Parrot.StringLiteral("'{0}keyword_only_endsin. a dot'".format(delimiter)).Values;
                     areEqual(2, parts.length);
-                    areEqual(encoding, parts[0].type);
-                    areEqual(StringLiteralPartType.literal, parts[1].type);
-                    areEqual("keyword_only_endsin", parts[0].data);
-                    areEqual(". a dot", parts[1].data);
+                    areEqual(encoding, parts[0].Type);
+                    areEqual(Parrot.StringLiteralPartType.Literal, parts[1].Type);
+                    areEqual("keyword_only_endsin", parts[0].Data);
+                    areEqual(". a dot", parts[1].Data);
                 }
             });
 
@@ -204,7 +204,7 @@
                 var elements = ["div", "a", "span"];
                 loop(elements, function (e) {
                     var document = parse(e);
-                    areEqual(e, document.children[0].name);
+                    areEqual(e, document.Children[0].Name);
                 });
             });
 
@@ -216,7 +216,7 @@
 
                 loop(elements, function (e) {
                     var document = parse(e.join(" "));
-                    areEqual(e.length, document.children.length);
+                    areEqual(e.length, document.Children.length);
                 });
             });
 
@@ -228,89 +228,89 @@
 
                 loop(elements, function (e) {
                     var document = parse("div { " + e.join(" ") + " }");
-                    areEqual(e.length, document.children[0].children.length);
+                    areEqual(e.length, document.Children[0].Children.length);
                 });
             });
 
             test("statement with one sibling", function () {
                 var document = parse("div1 + div2");
-                areEqual(2, document.children.length);
-                areEqual("div1", document.children[0].name);
-                areEqual("div2", document.children[1].name);
+                areEqual(2, document.Children.length);
+                areEqual("div1", document.Children[0].Name);
+                areEqual("div2", document.Children[1].Name);
             });
 
             test("statement with child followed by statement", function () {
                 var document = parse("parent > child statement");
-                areEqual(2, document.children.length);
-                areEqual("parent", document.children[0].name);
-                areEqual("statement", document.children[1].name);
-                areEqual("child", document.children[0].children[0].name);
+                areEqual(2, document.Children.length);
+                areEqual("parent", document.Children[0].Name);
+                areEqual("statement", document.Children[1].Name);
+                areEqual("child", document.Children[0].Children[0].Name);
             });
 
             test("statement with child followed by statement with child", function () {
                 var document = parse("parent > child statement > child2");
-                areEqual(2, document.children.length);
-                areEqual("parent", document.children[0].name);
-                areEqual("statement", document.children[1].name);
-                areEqual("child", document.children[0].children[0].name);
+                areEqual(2, document.Children.length);
+                areEqual("parent", document.Children[0].Name);
+                areEqual("statement", document.Children[1].Name);
+                areEqual("child", document.Children[0].Children[0].Name);
             });
 
             test("statement with literal child followed by statement with child", function () {
                 var document = parse("parent |child\nstatement > child2");
-                areEqual(2, document.children.length);
-                areEqual("parent", document.children[0].name);
-                areEqual("statement", document.children[1].name);
-                areEqual("string", document.children[0].children[0].name);
+                areEqual(2, document.Children.length);
+                areEqual("parent", document.Children[0].Name);
+                areEqual("statement", document.Children[1].Name);
+                areEqual("string", document.Children[0].Children[0].Name);
             });
 
             test("statement with literal child followed by statement with literal child", function () {
                 var document = parse("parent |child\nstatement |child2\n");
-                areEqual(2, document.children.length);
-                areEqual("parent", document.children[0].name);
-                areEqual("statement", document.children[1].name);
-                areEqual("string", document.children[0].children[0].name);
+                areEqual(2, document.Children.length);
+                areEqual("parent", document.Children[0].Name);
+                areEqual("statement", document.Children[1].Name);
+                areEqual("string", document.Children[0].Children[0].Name);
             });
 
             test("statement with two siblings", function () {
                 var document = parse("div1 + div2 + div3");
-                areEqual(3, document.children.length);
-                areEqual("div1", document.children[0].name);
-                areEqual("div2", document.children[1].name);
-                areEqual("div3", document.children[2].name);
+                areEqual(3, document.Children.length);
+                areEqual("div1", document.Children[0].Name);
+                areEqual("div2", document.Children[1].Name);
+                areEqual("div3", document.Children[2].Name);
             });
 
             test("statement with children identified as siblings", function () {
                 var document = parse("div1 > child1 + child2");
-                var parent = document.children[0];
+                var parent = document.Children[0];
 
-                areEqual(2, parent.children.length);
-                areEqual("child1", parent.children[0].name);
-                areEqual("child2", parent.children[1].name);
+                areEqual(2, parent.Children.length);
+                areEqual("child1", parent.Children[0].Name);
+                areEqual("child2", parent.Children[1].Name);
             });
 
             test("statement with children identified as siblings 2", function () {
                 var document = parse("div1 > div2 > child1 + child2");
-                var parent = document.children[0];
+                var parent = document.Children[0];
 
-                areEqual(1, parent.children.length);
-                areEqual(2, parent.children[0].children.length);
-                areEqual("child1", parent.children[0].children[0].name);
-                areEqual("child2", parent.children[0].children[1].name);
+                areEqual(1, parent.Children.length);
+                areEqual(2, parent.Children[0].Children.length);
+                areEqual("child1", parent.Children[0].Children[0].Name);
+                areEqual("child2", parent.Children[0].Children[1].Name);
             });
 
             test("statement with one child", function () {
                 var document = parse("div > span");
-                areEqual(1, document.children[0].children.length);
-                areEqual("div", document.children[0].name);
-                areEqual("span", document.children[0].children[0].name);
+                areEqual(1, document.Children[0].Children.length);
+                areEqual("div", document.Children[0].Name);
+                areEqual("span", document.Children[0].Children[0].Name);
             });
 
             test("statemen twith nested children", function () {
                 var document = parse("div > span > a");
-                areEqual(1, document.children.length);
-                areEqual("div", document.children[0].name);
-                areEqual("span", document.children[0].children[0].name);
-                areEqual("a", document.children[0].children[0].children[0].name);
+                areEqual(1, document.Children.length);
+                areEqual("div", document.Children[0].Name);
+                areEqual("span", document.Children[0].Children[0].Name);
+                areEqual("a", document.Children[0].Children[0].Children[0].Name);
             });
 
             (function () {
@@ -318,26 +318,26 @@
                 test("element with id produces block element with id attribute", function () {
                     (function (element, id) {
                         var document = parse("{0}#{1}".format(element, id));
-                        areEqual(element, document.children[0].name);
-                        areEqual("id", document.children[0].attributes[0].key);
-                        areEqual(id, (document.children[0].attributes[0].value.values[0].data));
+                        areEqual(element, document.Children[0].Name);
+                        areEqual("id", document.Children[0].Attributes[0].Key);
+                        areEqual(id, (document.Children[0].Attributes[0].Value.Values[0].Data));
                     })("div", "sample-id");
                 });
 
                 test("element with multiple ids returns errors", function () {
                     var document = parse("div#first-id#second-id");
-                    areEqual("second-id", document.errors[0].id);
+                    areEqual("second-id", document.Errors[0].Id);
                 });
 
                 test("element with two or more ids returns errors", function () {
                     var document = parse("div#first-id#second-id#third-id");
-                    areEqual("second-id", document.errors[0].id);
-                    areEqual("third-id", document.errors[1].id);
+                    areEqual("second-id", document.Errors[0].Id);
+                    areEqual("third-id", document.Errors[1].Id);
                 });
 
                 test("element with empty id declaration", function () {
                     var document = parse("div#");
-                    areEqual("Missing Id declaration", document.errors[0].message);
+                    areEqual("Missing Id declaration", document.Errors[0].Message);
                 });
             })();
 
@@ -347,25 +347,25 @@
                 (function (element, _class) {
                     test("element with id produces block element with class attribute", function () {
                         var document = parse("{0}.{1}".format(element, _class));
-                        areEqual("class", document.children[0].attributes[0].key);
-                        areEqual(_class, document.children[0].attributes[0].value.values[0].data);
+                        areEqual("class", document.Children[0].Attributes[0].Key);
+                        areEqual(_class, document.Children[0].Attributes[0].Value.Values[0].Data);
                     });
                 })("div", "sample-class");
 
                 (function (element, classes) {
                     test("element with multiple classes produces block welement with class element and space separated class list", function() {
                         var document = parse("{0}.{1}".format(element, classes.join(".")));
-                        areEqual("class", document.children[0].attributes[0].key);
+                        areEqual("class", document.Children[0].Attributes[0].Key);
                         for (var i in classes) {
                             var _class = classes[i];
-                            areEqual(_class, document.children[0].attributes[i].value.values[0].data);
+                            areEqual(_class, document.Children[0].Attributes[i].Value.Values[0].Data);
                         }
                     });
                 })("div", ["class1", "class2", "class3"]);
 
                 test("element with empty class declaration returns error", function() {
                     var document = parse("div.");
-                    areEqual("Missing Class declaration", document.errors[0].message);
+                    areEqual("Missing Class declaration", document.Errors[0].Message);
                 });
             })();
 
@@ -373,54 +373,54 @@
                 //attribute tests
                 test("element with single attribute produces block element with attributes", function() {
                     var document = parse("div[attr1='value1']");
-                    areEqual(1, document.children[0].attributes.length);
+                    areEqual(1, document.Children[0].Attributes.length);
                 });
 
                 test("element with mutiple attributes produces block elemet with multiple attributes", function() {
                     var document = parse("div[attr1='value1' attr2='value2']");
-                    areEqual(2, document.children[0].attributes.length);
+                    areEqual(2, document.Children[0].Attributes.length);
                 });
 
                 test("element with attributes value not surrounded by quotes produces attribute with value type as property", function() {
                     var document = parse("div[attr1=Value]");
-                    areEqual(1, document.children[0].attributes.length);
+                    areEqual(1, document.Children[0].Attributes.length);
                 });
 
                 test("element with attribute value set to 'this' produces attrivute value with type as local", function() {
                     var document = parse("div[attr1=this]");
-                    areEqual(1, document.children[0].attributes.length);
+                    areEqual(1, document.Children[0].Attributes.length);
                 });
 
                 test("element with attribute value and child prints out proper attributes", function() {
                     var document = parse("a[href='/blah'] |Child\r\n");
-                    areEqual("href", document.children[0].attributes[0].key);
+                    areEqual("href", document.Children[0].Attributes[0].Key);
                 });
 
                 test("element with attribute withno value produces attribute with value set to null", function() {
                     var document = parse("div[attr]");
-                    areEqual("attr", document.children[0].attributes[0].key);
+                    areEqual("attr", document.Children[0].Attributes[0].Key);
                 });
 
                 test("element without element declaration but with class declaration creates div element", function() {
                     var document = parse(".sample-class");
-                    areEqual(null, document.children[0].name);
-                    areEqual("class", document.children[0].attributes[0].key);
-                    areEqual("sample-class", document.children[0].attributes[0].value.values[0].data);
+                    areEqual(null, document.Children[0].Name);
+                    areEqual("class", document.Children[0].Attributes[0].Key);
+                    areEqual("sample-class", document.Children[0].Attributes[0].Value.Values[0].Data);
                 });
 
                 test("element with missing attribute value but with equals adds error to document errors", function() {
                     var document = parse("div[attr1=]");
-                    areEqual("Attribute must have a value", document.errors[0].message);
+                    areEqual("Attribute must have a value", document.Errors[0].Message);
                 });
 
                 test("element with attribute value only adds error to document errors", function() {
                     var document = parse("div[='value only']");
-                    areEqual("Invalid attribute name", document.errors[0].message);
+                    areEqual("Invalid attribute name", document.Errors[0].Message);
                 });
 
                 test("attribute value with missing closing quote adds error to document errors", function() {
                     var document = parse("div[attr1='missing closing quote");
-                    areEqual("Unexpected end of stream", document.errors[0].message);
+                    areEqual("Unexpected end of stream", document.Errors[0].Message);
                 });
             })();
 
@@ -428,14 +428,14 @@
                 //parameter tests
                 test("parameter loads one parameter", function () {
                     var document = parse("div(param1)");
-                    areEqual(1, document.children[0].parameters.length);
-                    areEqual("param1", document.children[0].parameters[0].value);
+                    areEqual(1, document.Children[0].Parameters.length);
+                    areEqual("param1", document.Children[0].Parameters[0].Value);
                 });
                 test("parameter loads two parameters", function () {
                     var document = parse("div(param1, param2)");
-                    areEqual(2, document.children[0].parameters.length);
-                    areEqual("param1", document.children[0].parameters[0].value);
-                    areEqual("param2", document.children[0].parameters[1].value);
+                    areEqual(2, document.Children[0].Parameters.length);
+                    areEqual("param1", document.Children[0].Parameters[0].Value);
+                    areEqual("param2", document.Children[0].Parameters[1].Value);
                 });
             })();
         })();

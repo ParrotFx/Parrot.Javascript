@@ -1,87 +1,89 @@
-///<reference path="../exceptions.ts" />
-enum TagRenderMode {
-    startTag,
-    endTag,
-    selfClosing,
-    normal
-}
-
-class TagBuilder {
-    name: string;
-    innerHtml: string;
-    attributes: any[];
-
-    constructor(name: string) {
-        this.name = name;
-        this.innerHtml = "";
-        this.attributes = [];
+///<reference path="../Infrastructure/exceptions.ts" />
+module Parrot.Renderers {
+    export enum TagRenderMode {
+        StartTag,
+        EndTag,
+        SelfClosing,
+        Normal
     }
 
-    toString(renderMode: TagRenderMode): string {
-        switch (renderMode) {
-            case TagRenderMode.startTag:
-                return "<" + this.name + this.appendAttributes() + ">";
-            case TagRenderMode.endTag:
-                return "</" + this.name + ">";
-            case TagRenderMode.selfClosing:
-                return "<" + this.name + this.appendAttributes() + " />";
-            default:
-                return "<" + this.name + this.appendAttributes() + this.innerHtml + "</" + this.name + ">";
+    export class TagBuilder {
+        public Name: string;
+        public InnerHtml: string;
+        public Attributes: any[];
+
+        constructor(name: string) {
+            this.Name = name;
+            this.InnerHtml = "";
+            this.Attributes = [];
         }
-    }
 
-    appendAttributes(): string {
-        var render: string = "";
-        for (var i in this.attributes) {
-            var attribute = this.attributes[i];
-            var key: string = i;
-            var value = attribute;
+        public toString(renderMode: TagRenderMode): string {
+            switch (renderMode) {
+                case TagRenderMode.StartTag:
+                    return "<" + this.Name + this.AppendAttributes() + ">";
+                case TagRenderMode.EndTag:
+                    return "</" + this.Name + ">";
+                case TagRenderMode.SelfClosing:
+                    return "<" + this.Name + this.AppendAttributes() + " />";
+                default:
+                    return "<" + this.Name + this.AppendAttributes() + this.InnerHtml + "</" + this.Name + ">";
+            }
+        }
 
-            if (key == "id" && value == null || value.length == 0) {
-                continue;
+        private AppendAttributes(): string {
+            var render: string = "";
+            for (var i in this.Attributes) {
+                var attribute = this.Attributes[i];
+                var key: string = i;
+                var value = attribute;
+
+                if (key == "id" && value == null || value.Length == 0) {
+                    continue;
+                }
+
+                if (value != null) {
+                    value = this.HtmlAttributeEncode(value);
+                } else {
+                    value = key;
+                }
+
+                render += " " + key + "=\"" + value + "\"";
             }
 
-            if (value != null) {
-                value = this.htmlAttributeEncode(value);
+            return render;
+        }
+
+        private HtmlAttributeEncode(value: string): string {
+            return value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#39;");
+        }
+
+        public MergeAttribute(key: string, value: string, replaceExisting: boolean) {
+            if (key == null || key.length == 0) {
+                throw new Infrastructure.ArgumentException("key");
+            }
+
+            if (replaceExisting || !this.ContainsKey(this.Attributes, key)) {
+                this.Attributes[key] = value;
+            }
+        }
+
+        private ContainsKey(source: any[], key: string) {
+            for (var i in source) {
+                if (i == key) {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public AddCssClass(value: string): void {
+            if (this.Attributes["class"] != undefined && this.Attributes["class"] != null) {
+                this.Attributes["class"] = value + " " + this.Attributes["class"];
             } else {
-                value = key;
+                this.Attributes["class"] = value;
             }
-
-            render += " " + key + "=\"" + value + "\"";
-        }
-
-        return render;
-    }
-
-    htmlAttributeEncode(value: string): string {
-        return value.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;").replace("'", "&#39;");
-    }
-
-    mergeAttribute(key: string, value: string, replaceExisting: bool) {
-        if (key == null || key.length == 0) {
-            throw new ArgumentException("key");
-        }
-
-        if (replaceExisting || !this.containsKey(this.attributes, key)) {
-            this.attributes[key] = value;
-        }
-    }
-
-    containsKey(source: any[], key: string) {
-        for (var i in source) {
-            if (i == key) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    addCssClass(value: string): void {
-        if (this.attributes["class"] != undefined && this.attributes["class"] != null) {
-            this.attributes["class"] = value + " " + this.attributes["class"];
-        } else {
-            this.attributes["class"] = value;
         }
     }
 }

@@ -1,26 +1,28 @@
-///<reference path="../Parser/parser.ts" />
+///<reference path="../parser.ts" />
 ///<reference path="./irenderer.ts" />
 ///<reference path="./rendererProvider.ts" />
 ///<reference path="../Infrastructure/ObjectModelValueProvider.ts" />
 ///<reference path="../Infrastructure/ValueTypeProvider.ts" />
-///<reference path="../exceptions.ts" />
+///<reference path="../Infrastructure/exceptions.ts" />
 ///<reference path="./tagBuilder.ts" />
 ///<reference path="./baseRenderer.ts" />
 ///<reference path="./selfClosingRenderer.ts" />
 
-class IfRenderer extends HtmlRenderer {
-    defaultChildTag: string = "";
-    rendererProvider: RendererProvider;
-    elements: string[] = ["if"];
+module Parrot.Renderers {
+    export class IfRenderer extends HtmlRenderer {
+        DefaultChildTag: string = "";
+        RendererProvider: RendererProvider;
+        Elements: string[] = ["if"];
 
-    render(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider): string {
-        this.rendererProvider = rendererProvider;
-        //get the local model
-        //var localModel = this.getLocalModelValue(host, statement, model);
-        var localModel = this.getLocalModelValue(host, statement, model);
+        public Render(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider): string {
+            this.RendererProvider = rendererProvider;
+            //get the local model
+            //var localModel = this.getLocalModelValue(host, statement, model);
+            var localModel = this.GetLocalModelValue(host, statement, model);
 
-        if (localModel != null && localModel == true) {
-            return this.renderChildren(statement, host, model, this.defaultChildTag);
+            if (localModel != null && localModel == true) {
+                return this.RenderChildren(statement, host, model, this.DefaultChildTag);
+            }
         }
     }
 }

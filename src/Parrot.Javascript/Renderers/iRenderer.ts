@@ -1,9 +1,11 @@
 ///<reference path="rendererProvider.ts" />
-interface IRenderer {
-    defaultChildTag: string;
-    elements: string[];
-    rendererProvider: RendererProvider;
-    beforeRender(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider);
-    render(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider);
-    afterRender(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider);
+module Parrot.Renderers {
+    export interface IRenderer {
+        DefaultChildTag: string;
+        Elements: string[];
+        RendererProvider: RendererProvider;
+        BeforeRender(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider);
+        Render(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider): string;
+        AfterRender(statement: Statement, host: any[], model: any, rendererProvider: RendererProvider);
+    }
 }

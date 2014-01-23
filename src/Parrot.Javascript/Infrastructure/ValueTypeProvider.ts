@@ -1,51 +1,53 @@
-///<reference path="../Parser/parser.ts" />
-class ValueTypeResult {
-    type: ValueType;
-    value: any;
-    constructor(type: ValueType, value: any) {
-        this.type = type;
-        this.value = value;
-    }
-}
-
-class ValueTypeProvider {
-    keywordHandlers: any[];
-
-    constructor() {
-        this.keywordHandlers = [];
-        this.keywordHandlers["this"] = function (s) { return new ValueTypeResult(ValueType.local, "this"); };
-        this.keywordHandlers["false"] = function (s) { return new ValueTypeResult(ValueType.local, false); };
-        this.keywordHandlers["true"] = function (s) { return new ValueTypeResult(ValueType.local, true); };
-        this.keywordHandlers["null"] = function (s) { return new ValueTypeResult(ValueType.local, null); };
+///<reference path="../parser.ts" />
+module Parrot.Infrastructure {
+    export class ValueTypeResult {
+        Type: ValueType;
+        Value: any;
+        constructor(type: ValueType, value: any) {
+            this.Type = type;
+            this.Value = value;
+        }
     }
 
-    getValue(value: string) {
-        var result = new ValueTypeResult(ValueType.stringLiteral, null);
-        if (value == null) {
+    export class ValueTypeProvider {
+        keywordHandlers: any[];
+
+        constructor() {
+            this.keywordHandlers = [];
+            this.keywordHandlers["this"] = function (s) { return new ValueTypeResult(ValueType.Local, "this"); };
+            this.keywordHandlers["false"] = function (s) { return new ValueTypeResult(ValueType.Local, false); };
+            this.keywordHandlers["true"] = function (s) { return new ValueTypeResult(ValueType.Local, true); };
+            this.keywordHandlers["null"] = function (s) { return new ValueTypeResult(ValueType.Local, null); };
+        }
+
+        public GetValue(value: string) {
+            var result = new ValueTypeResult(ValueType.StringLiteral, null);
+            if (value == null) {
+                return result;
+            }
+
+            if (this.IsWrappedInQuotes(value)) {
+                result.Type = ValueType.StringLiteral;
+                result.Value = value.substring(1, 1 + value.length - 2);
+            } else {
+                if (this.keywordHandlers[value] != null) {
+                    result = this.keywordHandlers[value](value);
+                } else {
+                    result.Type = ValueType.Property;
+                    result.Value = value;
+                }
+            }
+
             return result;
         }
 
-        if (this.isWrappedInQuotes(value)) {
-            result.type = ValueType.stringLiteral;
-            result.value = value.substring(1, 1 + value.length - 2);
-        } else {
-            if (this.keywordHandlers[value] != null) {
-                result = this.keywordHandlers[value](value);
-            } else {
-                result.type = ValueType.property;
-                result.value = value;
-            }
+        private IsWrappedInQuotes(value: string): boolean {
+            return (this.StartsWith(value, "\"") || this.StartsWith(value, "'"));
         }
 
-        return result;
-    }
+        private StartsWith(source: string, value: string): boolean {
+            return source.length > 0 && source.charAt(0) == value;
+        }
 
-    isWrappedInQuotes(value: string): bool {
-        return (this.startsWith(value, "\"") || this.startsWith(value, "'"));
     }
-
-    startsWith(source: string, value: string): bool {
-        return source.length > 0 && source.charAt(0) == value;
-    }
-
 }

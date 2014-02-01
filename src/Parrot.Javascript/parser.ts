@@ -142,6 +142,17 @@ module Parrot {
                             tail = this.ParseSingleStatementTail(stream, tail);
                             break;
                         }
+                    case Lexer.TokenType.Caret:
+                        if (tail) {
+                            stream.NextNoReturn();
+                            if (stream.Peek() == null || stream.Peek().Type !== Lexer.TokenType.Caret) {
+                                var t = this.ParseSingleStatementTail(stream, tail);
+                                if (t != null && t.Children.length == 1) {
+                                    tail.Children.push(t.Children[0]);
+                                    break;
+                                }
+                            }
+                        }
                     default:
                         this.GetStatementFromToken(identifier, tail, null);
                         exit = true;
@@ -200,7 +211,10 @@ module Parrot {
             if (!tail) {
                 tail = new StatementTail();
             }
-            tail.Children = statementList;
+
+            for (var i in statementList) {
+                tail.Children.push(statementList[i]);
+            }
 
             return tail;
         }
@@ -233,9 +247,9 @@ module Parrot {
             }
 
             var tail = new StatementTail();
-            tail.Attributes = additional[0];
-            tail.Parameters = additional[1];
-            tail.Children = additional[2];
+            tail.Attributes = additional[0] || new Array<Attribute>();
+            tail.Parameters = additional[1] || new Array<Parameter>();
+            tail.Children = additional[2] || new Array<Statement>();
 
             return tail;
         }
@@ -660,6 +674,12 @@ module Parrot {
         public Parameters: Parameter[];
         public Attributes: Attribute[];
         public Children: Statement[];
+
+        constructor() {
+            this.Parameters = new Array<Parameter>();
+            this.Attributes = new Array<Attribute>();
+            this.Children = new Array<Statement>();
+        }
     }
 
     export class Attribute {

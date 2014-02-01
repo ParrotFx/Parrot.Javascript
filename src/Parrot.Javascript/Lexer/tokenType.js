@@ -22,6 +22,7 @@ var Parrot;
             TokenType[TokenType["CommentEnd"] = 17] = "CommentEnd";
             TokenType[TokenType["Equal"] = 18] = "Equal";
             TokenType[TokenType["At"] = 19] = "At";
+            TokenType[TokenType["Caret"] = 20] = "Caret";
         })(Lexer.TokenType || (Lexer.TokenType = {}));
         var TokenType = Lexer.TokenType;
     })(Parrot.Lexer || (Parrot.Lexer = {}));

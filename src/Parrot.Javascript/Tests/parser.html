@@ -422,6 +422,33 @@
                     var document = parse("div[attr1='missing closing quote");
                     areEqual("Unexpected end of stream", document.Errors[0].Message);
                 });
+
+                test("element in child element with caret climbs up", function () {
+                    var document = parse("div>p^p");
+                    areEqual(0, document.Errors.length);
+                    areEqual("div", document.Children[0].Name);
+                    areEqual("p", document.Children[0].Children[0].Name);
+                    areEqual("p", document.Children[0].Children[1].Name);
+                });
+
+                test("element in child element with caret climbs up", function () {
+                    var document = parse("root>a>b^^a2");
+                    areEqual(0, document.Errors.length);
+                    areEqual("root", document.Children[0].Name);
+                    areEqual("a", document.Children[0].Children[0].Name);
+                    areEqual("b", document.Children[0].Children[0].Children[0].Name);
+                    areEqual("a2", document.Children[0].Children[1].Name);
+                });
+
+                test("element tries to escape above parent fails", function () {
+                    var document = parse("div^p");
+                    areEqual(1, document.Errors.length);
+                });
+
+                test("element within child tries to escape above grandparent fails", function () {
+                    var document = parse("div>p^^p");
+                    areEqual(1, document.Errors.length);
+                });
             })();
 
             (function() {

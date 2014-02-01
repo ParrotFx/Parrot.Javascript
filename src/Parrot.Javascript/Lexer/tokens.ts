@@ -79,6 +79,12 @@ module Parrot.Lexer {
         }
     }
 
+    export class CarotToken extends Token {
+        constructor(index: number) {
+            super(index, "^", TokenType.Caret);
+        }
+    }
+
     export class IdentifierToken extends Token {
         constructor(index: number, content: string, type: TokenType) {
             super(index, content, type);

@@ -126,6 +126,15 @@ var Parrot;
         })(Parrot.Lexer.Token);
         Lexer.CommaToken = CommaToken;
 
+        var CarotToken = (function (_super) {
+            __extends(CarotToken, _super);
+            function CarotToken(index) {
+                _super.call(this, index, "^", 20 /* Caret */);
+            }
+            return CarotToken;
+        })(Parrot.Lexer.Token);
+        Lexer.CarotToken = CarotToken;
+
         var IdentifierToken = (function (_super) {
             __extends(IdentifierToken, _super);
             function IdentifierToken(index, content, type) {

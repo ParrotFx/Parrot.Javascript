@@ -145,6 +145,9 @@ var Parrot;
                         case '@':
                             this.Consume();
                             return new Parrot.Lexer.AtToken(this._currentIndex);
+                        case '^':
+                            this.Consume();
+                            return new Parrot.Lexer.CarotToken(this._currentIndex);
                         case '\0':
                             return null;
                         default:

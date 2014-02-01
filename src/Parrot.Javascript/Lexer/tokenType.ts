@@ -19,6 +19,7 @@ module Parrot.Lexer {
         CommentStart,
         CommentEnd,
         Equal,
-        At
+        At,
+        Caret
     }
 }

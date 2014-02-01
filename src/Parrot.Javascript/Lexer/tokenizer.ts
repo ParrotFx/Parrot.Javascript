@@ -147,6 +147,9 @@ module Parrot.Lexer {
                     case '@': //Encoded output
                         this.Consume();
                         return new AtToken(this._currentIndex);
+                    case '^':
+                        this.Consume();
+                        return new CarotToken(this._currentIndex);
                     case '\0':
                         return null;
                     default:

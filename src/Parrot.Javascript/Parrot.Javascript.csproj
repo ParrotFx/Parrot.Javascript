@@ -51,25 +51,25 @@
       <DependentUpon>tokenizer.ts</DependentUpon>
     </Content>
     <Content Include="Lexer\tokenizer.min.js">
-      <DependentUpon>tokenizer.ts</DependentUpon>
+      <DependentUpon>tokenizer.js</DependentUpon>
     </Content>
     <Content Include="Lexer\tokens.js">
       <DependentUpon>tokens.ts</DependentUpon>
     </Content>
     <Content Include="Lexer\tokens.min.js">
-      <DependentUpon>tokens.ts</DependentUpon>
+      <DependentUpon>tokens.js</DependentUpon>
     </Content>
     <Content Include="Lexer\tokenType.js">
       <DependentUpon>tokenType.ts</DependentUpon>
     </Content>
     <Content Include="Lexer\tokenType.min.js">
-      <DependentUpon>tokenType.ts</DependentUpon>
+      <DependentUpon>tokenType.js</DependentUpon>
     </Content>
     <Content Include="parser.js">
       <DependentUpon>parser.ts</DependentUpon>
     </Content>
     <Content Include="parser.min.js">
-      <DependentUpon>parser.ts</DependentUpon>
+      <DependentUpon>parser.js</DependentUpon>
     </Content>
     <Content Include="parserError.js">
       <DependentUpon>parserError.ts</DependentUpon>
@@ -263,6 +263,18 @@
     </Content>
     <Content Include="Infrastructure\exceptions.js.map">
       <DependentUpon>exceptions.ts</DependentUpon>
+    </Content>
+    <Content Include="parser.min.js.map">
+      <DependentUpon>parser.min.js</DependentUpon>
+    </Content>
+    <Content Include="Lexer\tokens.min.js.map">
+      <DependentUpon>tokens.min.js</DependentUpon>
+    </Content>
+    <Content Include="Lexer\tokenType.min.js.map">
+      <DependentUpon>tokenType.min.js</DependentUpon>
+    </Content>
+    <Content Include="Lexer\tokenizer.min.js.map">
+      <DependentUpon>tokenizer.min.js</DependentUpon>
     </Content>
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>

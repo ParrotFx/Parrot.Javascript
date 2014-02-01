@@ -142,6 +142,17 @@ var Parrot;
                             tail = this.ParseSingleStatementTail(stream, tail);
                             break;
                         }
+                    case 20 /* Caret */:
+                        if (tail) {
+                            stream.NextNoReturn();
+                            if (stream.Peek() == null || stream.Peek().Type !== 20 /* Caret */) {
+                                var t = this.ParseSingleStatementTail(stream, tail);
+                                if (t != null && t.Children.length == 1) {
+                                    tail.Children.push(t.Children[0]);
+                                    break;
+                                }
+                            }
+                        }
                     default:
                         this.GetStatementFromToken(identifier, tail, null);
                         exit = true;
@@ -198,7 +209,10 @@ var Parrot;
             if (!tail) {
                 tail = new StatementTail();
             }
-            tail.Children = statementList;
+
+            for (var i in statementList) {
+                tail.Children.push(statementList[i]);
+            }
 
             return tail;
         };
@@ -231,9 +245,9 @@ var Parrot;
             }
 
             var tail = new StatementTail();
-            tail.Attributes = additional[0];
-            tail.Parameters = additional[1];
-            tail.Children = additional[2];
+            tail.Attributes = additional[0] || new Array();
+            tail.Parameters = additional[1] || new Array();
+            tail.Children = additional[2] || new Array();
 
             return tail;
         };
@@ -672,6 +686,9 @@ var Parrot;
 
     var StatementTail = (function () {
         function StatementTail() {
+            this.Parameters = new Array();
+            this.Attributes = new Array();
+            this.Children = new Array();
         }
         return StatementTail;
     })();
